@@ -17,7 +17,7 @@ public class MeepMeepTestingAutonExample {
 
                 // Basic Square
                  // Set bot starting location
-                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
+                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(0, -54, 0))
 
                          //Paste Trajectory here
 
