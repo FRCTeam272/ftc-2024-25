@@ -21,20 +21,24 @@ public class MeepMeepTestingAutonExample {
 
                          //Paste Trajectory here
 
-                         .splineTo(new Vector2d(10, 10), 0)
-                         .turn(Math.toRadians(90))
-                         .splineTo(new Vector2d(25, -15), 0)
-                         .waitSeconds(3)
-                         .turn(Math.toRadians(45))
-                         .forward(10)
-                         .strafeRight(5)
-                         .turn(Math.toRadians(90))
-                         .strafeLeft(5)
-                         .waitSeconds(1)
-                         .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(45)), 0)
+//                         .splineTo(new Vector2d(10, 10), 0)
+//                         .turn(Math.toRadians(90))
+//                         .splineTo(new Vector2d(25, -15), 0)
+//                         .waitSeconds(3)
+//                         .turn(Math.toRadians(45))
+//                         .forward(10)
+//                         .strafeRight(5)
+//                         .turn(Math.toRadians(90))
+//                         .strafeLeft(5)
+//                         .waitSeconds(1)
+//                         .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(45)), 0)
 
-                        //End of Trajectory
-                        .build());
+                         .splineTo(new Vector2d(0,-32), Math.toRadians(90))
+                         .waitSeconds(2)
+                         .strafeLeft(48)
+                         .turn(Math.toRadians(0))
+                         .splineTo(new Vector2d(-53,-53),Math.toRadians(225))
+                         .build());
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
