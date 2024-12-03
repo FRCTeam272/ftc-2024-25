@@ -17,7 +17,7 @@ public class MeepMeepTestingAutonBasket {
 
                 // Basic Square
                  // Set bot starting location
-                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, -63, Math.toRadians(180)))
+                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, -64, Math.toRadians(180)))
 
                          //Paste Trajectory here
                          //Basket Side
