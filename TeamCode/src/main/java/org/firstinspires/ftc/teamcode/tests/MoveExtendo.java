@@ -11,12 +11,12 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 public class MoveExtendo extends OpMode {
 
     static DcMotorEx extendo;
-    TouchSensor extendoLimit;
+//    TouchSensor extendoLimit;
 
        public void init() {
 
            //initialize touch sensor and extendo motor
-           extendoLimit = hardwareMap.get(TouchSensor.class, "extendoLS");
+           //extendoLimit = hardwareMap.get(TouchSensor.class, "extendoLS");
 
            extendo = hardwareMap.get(DcMotorEx.class, "extendoM");
            extendo.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -36,15 +36,15 @@ public class MoveExtendo extends OpMode {
            telemetry.update();
 
            //Use A button to retract until limit switch is pressed, then reset encoder
-           if (gamepad2.a){
-               extendo.setPower(-1);
-               while (!extendoLimit.isPressed()){
-
-               }
-               extendo.setPower(0);
-               extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-               extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-           }
+//           if (gamepad2.a){
+//               extendo.setPower(-1);
+//               while (!extendoLimit.isPressed()){
+//
+//               }
+//               extendo.setPower(0);
+//               extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//               extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//           }
 
            //use GP2 right stick to move extendo
            extendo.setPower(gamepad2.right_stick_y);
