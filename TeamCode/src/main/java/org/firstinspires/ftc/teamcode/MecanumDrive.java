@@ -511,8 +511,8 @@ public final class MecanumDrive {
 
         // Get translation power
         Vector2d dir = new Vector2d(
-                -gamepad.left_stick_y,
-                -gamepad.left_stick_x
+                -gamepad.left_stick_x, //reversed x and y
+                -gamepad.left_stick_y
         );
 
         // Get rotation power

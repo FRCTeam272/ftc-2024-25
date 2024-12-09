@@ -45,6 +45,16 @@ public class PitMode extends LinearOpMode {
             double x = gamepad1.left_stick_x/2;
             double rx = gamepad1.right_stick_x/1.5;
 
+            double fastpower = 3;
+
+            if(gamepad1.left_bumper)  {
+                fastpower = 1;
+            }
+            else {
+                fastpower = 3;
+            }
+
+
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
@@ -71,10 +81,10 @@ public class PitMode extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            FL.setPower(frontLeftPower/3);
-            BL.setPower(backLeftPower/3);
-            FR.setPower(frontRightPower/3);
-            BR.setPower(backRightPower/3);
+            FL.setPower(frontLeftPower/fastpower);
+            BL.setPower(backLeftPower/fastpower);
+            FR.setPower(frontRightPower/fastpower);
+            BR.setPower(backRightPower/fastpower);
 
 
         }
