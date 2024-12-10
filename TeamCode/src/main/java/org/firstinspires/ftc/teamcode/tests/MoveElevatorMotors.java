@@ -46,8 +46,9 @@ public class MoveElevatorMotors extends OpMode {
 
         //Write extendo position to screen, with instructions for use
         telemetry.addData("Status", "Looping");
-        telemetry.addData("To Move Right Slide Motor", "Use Gamepad 2 Right Stick");
-        telemetry.addData("To Move Left Slide Motot", "Use Gamepad 2 Left Stick");
+        telemetry.addData("Power set to", "50% for testing purposes");
+        telemetry.addData("To Move Right Slide Motor", "Use Gamepad 1 Right Stick");
+        telemetry.addData("To Move Left Slide Motot", "Use Gamepad 1 Left Stick");
         telemetry.addData("right slide position", rightSlide.getCurrentPosition());
         telemetry.addData("left slide position", leftSlide.getCurrentPosition());
         telemetry.update();
@@ -68,10 +69,10 @@ public class MoveElevatorMotors extends OpMode {
 
 
 
-        //use GP2 right stick to move right motor
-        rightSlide.setPower(gamepad2.right_stick_y);
-        //use GP2 left stick to move left motor
-        leftSlide.setPower(gamepad2.left_stick_y);
+        //use GP1 right stick to move right motor
+        rightSlide.setPower(gamepad1.right_stick_y/2); //half power
+        //use GP1 left stick to move left motor
+        leftSlide.setPower(gamepad1.left_stick_y/2); //half power
     }
     public void stop(){
 
