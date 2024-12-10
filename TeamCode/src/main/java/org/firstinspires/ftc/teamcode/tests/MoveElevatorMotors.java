@@ -27,7 +27,7 @@ public class MoveElevatorMotors extends OpMode {
 
 
         leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
-        leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

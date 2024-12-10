@@ -31,13 +31,14 @@ public class MoveExtendo extends OpMode {
            //Write extendo position to screen, with instructions for use
            telemetry.addData("Status", "Looping");
            telemetry.addData("To Move Extendo", "Use Gamepad 2 Right Stick");
-           telemetry.addData("To Fully Retract Extendo", "Use Gamepad 2 A");
+          // telemetry.addData("To Fully Retract Extendo and reset", "Use Gamepad 2 A");
+           telemetry.addData("To Reset Encoder", "Use Gamepad 2 X");
            telemetry.addData("extendo position", extendo.getCurrentPosition());
            telemetry.update();
 
            //Use A button to retract until limit switch is pressed, then reset encoder
 //           if (gamepad2.a){
-//               extendo.setPower(-1);
+//               extendo.setPower(-0.5);
 //               while (!extendoLimit.isPressed()){
 //
 //               }
@@ -46,8 +47,15 @@ public class MoveExtendo extends OpMode {
 //               extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //           }
 
+           // To reset encoder without a limit switch attached, gamepad2 x
+           if (gamepad2.x){
+               extendo.setPower(0);
+               extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+               extendo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+           }
+
            //use GP2 right stick to move extendo
-           extendo.setPower(gamepad2.right_stick_y);
+           extendo.setPower(gamepad2.right_stick_y/2);
     }
     public void stop(){
 
