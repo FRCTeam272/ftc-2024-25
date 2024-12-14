@@ -66,19 +66,19 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
-        public double inPerTick = 0.0362495;            // 2769 ticks / 100.375"
-        public double lateralInPerTick = 0.0393978;     // 2516 ticks / 99.125"
-        public double trackWidthTicks = 0;
+        public double inPerTick = 0.0029372;            // 72.75" / 24768.5 ticks or calc from deadwheel specs 0.002968435
+        public double lateralInPerTick = inPerTick;
+        public double trackWidthTicks = 4877.4397159;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
+        public double kS = 0.9323237145760834;
+        public double kV = 0.0007154074385129163;
         public double kA = 0;
 
-        // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        // TODO speeds - path profile parameters (in inches)
+        public double maxWheelVel = 25; // default is 50, changed to half
+        public double minProfileAccel = -15;  //default is -30, changed to half
+        public double maxProfileAccel = 25; //default is 50, changed to half
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
@@ -142,7 +142,8 @@ public final class MecanumDrive {
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+//            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+//            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override
@@ -231,8 +232,8 @@ public final class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
@@ -514,8 +515,8 @@ public final class MecanumDrive {
 
         // Get translation power
         Vector2d dir = new Vector2d(
-                -gamepad.left_stick_x, //reversed x and y
-                -gamepad.left_stick_y
+                -gamepad.left_stick_y,
+                -gamepad.left_stick_x
         );
 
         // Get rotation power

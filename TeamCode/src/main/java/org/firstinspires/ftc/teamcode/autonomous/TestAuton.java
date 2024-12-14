@@ -18,15 +18,15 @@ public class TestAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-24,-63,Math.toRadians(0));
+        Pose2d initialPose = new Pose2d(0,0,Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         //Build trajectories here
         TrajectoryActionBuilder toBasket = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(-55,-55), Math.toRadians(-135))
+                .strafeTo(new Vector2d(0,24))
                 .waitSeconds(1);
         Action trajectoryActionCloseOut = toBasket.fresh()
-                .strafeTo(new Vector2d(-24,-24))
+                .strafeTo(new Vector2d(0,12))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
