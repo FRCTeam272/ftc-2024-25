@@ -30,7 +30,7 @@ public class MoveExtendo extends OpMode {
 
            //Write extendo position to screen, with instructions for use
            telemetry.addData("Status", "Looping");
-           telemetry.addData("Power set to", "50% for testing purposes");
+           telemetry.addData("Power set to", "1/3rd for testing purposes");
            telemetry.addData("To Move Extendo", "Use Gamepad 1 Right Stick");
           // telemetry.addData("To Fully Retract Extendo and reset", "Use Gamepad 2 A");
            telemetry.addData("To Reset Encoder", "Use Gamepad 1 X");
@@ -56,7 +56,7 @@ public class MoveExtendo extends OpMode {
            }
 
            //use GP2 right stick to move extendo
-           extendo.setPower(gamepad1.right_stick_y/2); // run at half power, full power tends to launch things!
+           extendo.setPower(gamepad1.right_stick_y/3); // run at third power, full power tends to launch things!
     }
     public void stop(){
 

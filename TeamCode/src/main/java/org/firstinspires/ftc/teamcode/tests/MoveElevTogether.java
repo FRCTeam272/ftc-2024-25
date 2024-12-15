@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @TeleOp
-public class MoveElevatorMotors extends OpMode {
+public class MoveElevTogether extends OpMode {
     static DcMotor rightSlide;
     static DcMotor leftSlide;
 
@@ -17,7 +17,7 @@ public class MoveElevatorMotors extends OpMode {
     public void init() {
 
 
-        //initialize touch sensor and motors
+        //initialize touch sensor and extendo motor
 
 
         rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
@@ -35,6 +35,9 @@ public class MoveElevatorMotors extends OpMode {
         leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
     }
 
@@ -42,11 +45,10 @@ public class MoveElevatorMotors extends OpMode {
     public void loop() {
 
 
-        //Write extendo position to screen, with instructions for use
+        //Write motor position to screen, with instructions for use
         telemetry.addData("Status", "Looping");
         telemetry.addData("Power set to", "50% for testing purposes");
-        telemetry.addData("To Move Right Slide Motor", "Use Gamepad 1 Right Stick");
-        telemetry.addData("To Move Left Slide Motot", "Use Gamepad 1 Left Stick");
+        telemetry.addData("To Move Elevator", "Use Gamepad 1 Left Stick");
         telemetry.addData("To reset Encoders", "Use Gamepad 1 A");
         telemetry.addData("right slide position", rightSlide.getCurrentPosition());
         telemetry.addData("left slide position", leftSlide.getCurrentPosition());
@@ -73,10 +75,25 @@ public class MoveElevatorMotors extends OpMode {
         }
 
 
+//        double selectedValue = -1;
+//
+//            if(gamepad1.a){
+//                selectedValue = 0;
+//            } else if(gamepad1.b){
+//                selectedValue = 20;
+//            } else if(gamepad1.x){
+//                selectedValue = 50;
+//            }
+//
+//            if(selectedValue != -1){
+//                // internally these will log at nearly the same time like 1/60 of a second
+//                leftSlide.setPower(selectedValue);
+//                rightSlide.setPower(selectedValue);
+//            }
+
 
         //use GP1 right stick to move right motor
-        rightSlide.setPower(gamepad1.right_stick_y/2); //half power
-        //use GP1 left stick to move left motor
+        rightSlide.setPower(gamepad1.left_stick_y/2); //half power
         leftSlide.setPower(gamepad1.left_stick_y/2); //half power
     }
     public void stop(){
