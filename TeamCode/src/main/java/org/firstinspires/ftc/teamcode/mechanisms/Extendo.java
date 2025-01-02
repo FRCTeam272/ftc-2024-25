@@ -40,6 +40,7 @@ public class Extendo {
     public Extendo(HardwareMap hardwareMap){
         extendoM = hardwareMap.get(DcMotorEx.class, "extendoM");
         extendoM.setDirection(DcMotorSimple.Direction.REVERSE);
+        extendoM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extendoM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
@@ -52,41 +53,36 @@ public class Extendo {
         extendoController = new PIDFController(extendoP, extendoI, extendoD, extendoFF);
     }
 
-    public void Teleop(Gamepad gamepad2, Telemetry telemetry, Intake intake){
-/* if (toggleArm && (gamepad2.dpad_up || gamepad2.dpad_down)) { // Only execute once per Button push
- toggleArm = false; // Prevents this section of code from being called again until the Button is released and re-pressed
- if (gamepad2.dpad_down) { // If the d-pad up button is pressed
- armSlidePos = armSlidePos - 1; //Increase Arm position
- if (armSlidePos > armMax) { //If arm position is above 3
- armSlidePos = armMax; //Cap it at 3
- }
- } else if (gamepad2.dpad_up) { // If d-pad down button is pressed
- armSlidePos = armSlidePos + 1; //Decrease arm position
- if (armSlidePos < armMin) { //If arm position is below -3
- armSlidePos = armMin; //cap it at -3
- }
- }
+    public void Teleop(Gamepad gamepad2, Telemetry telemetry){
 
- }
- else if (!gamepad2.dpad_up && !gamepad2.dpad_down) { //if neither button is being pressed
- toggleArm = true; // Button has been released, so this allows a re-press to activate the code above.
- }*/
+        extendoPower = 0.5; // run at half power, full power tends to launch things!
+        if (extendoLimit.isPressed()) {
+            extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        } else {
+            extendoM.setPower(gamepad2.right_stick_y * extendoPower);
+        }
 
-        if (gamepad2.b){ // Stow Pos
-            extendoPos = 0;
-        }else if (gamepad2.a){ // Minimum Pickup Pos
-            extendoPos = 1;
-        }else if (gamepad2.x){ // Maximum Pickup Pos
-            extendoPos = 2;
+        if (extendoM.getCurrentPosition() >= 262) { //max position is 268, so set to something less
+            extendoPower = 0;
+            extendoM.setTargetPosition(260);
+        }
 
         }
 
+//        if (gamepad2.b){ // Stow Pos
+//            extendoPos = 0;
+//        }else if (gamepad2.a){ // Minimum Pickup Pos
+//            extendoPos = 1;
+//        }else if (gamepad2.x){ // Maximum Pickup Pos
+//            extendoPos = 2;
+//        }
+//
+//
+//        GoToPosition(extendoPos, telemetry);
 
-        GoToPosition(extendoPos, intake, telemetry);
-    }
 
-    public void GoToPosition(int position, Intake intake, Telemetry telemetry) {
+    public void GoToPosition(int position, Telemetry telemetry) {
 
         extendoPos = position; // to update in auto, redundant in teleop
 
@@ -120,6 +116,7 @@ public class Extendo {
 
             if (extendoM.getCurrentPosition() >= 262) { //max position is 268, so set to something less
                 extendoPower = 0;
+
             }
 
             extendoM.setPower(extendoPower);
