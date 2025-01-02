@@ -21,11 +21,11 @@ public class MoveElevTogether extends OpMode {
 
 
         rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
-        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        //rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
 
         leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");
-        //leftSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
 
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -93,8 +93,8 @@ public class MoveElevTogether extends OpMode {
 
 
         //use GP1 right stick to move right motor
-        rightSlide.setPower(gamepad1.left_stick_y/2); //half power
-        leftSlide.setPower(gamepad1.left_stick_y/2); //half power
+        rightSlide.setPower(-gamepad1.left_stick_y/2); //half power
+        leftSlide.setPower(-gamepad1.left_stick_y/2); //half power
     }
     public void stop(){
 

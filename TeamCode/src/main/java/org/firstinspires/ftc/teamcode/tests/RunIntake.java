@@ -25,7 +25,7 @@ public class RunIntake extends OpMode {
     public void init() {
 
         intakeFlop = hardwareMap.get(DcMotorEx.class, "intakeFlop");
-        //intakeFlop.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeFlop.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeFlop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeFlop.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -59,7 +59,7 @@ public class RunIntake extends OpMode {
         }
 
         //use GP1 right stick to move Flop
-        intakeFlop.setPower(gamepad1.right_stick_y / 3);
+        intakeFlop.setPower(-gamepad1.right_stick_y / 3);
 
         if (gamepad1.a) {
             leftIntake.setPower(1);

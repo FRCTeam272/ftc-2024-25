@@ -23,7 +23,7 @@ public class TelopTest extends OpMode {
     private Elevator elevator=null;
     private Extendo extendo=null;
     private Intake intake=null;
-    private Claw claw=null;
+    //private Claw claw=null;
 
     //@Override
     public void init() {
@@ -32,7 +32,7 @@ public class TelopTest extends OpMode {
         elevator = new Elevator(hardwareMap);
         extendo = new Extendo(hardwareMap);
         intake = new Intake(hardwareMap);
-        claw = new Claw(hardwareMap);
+        //claw = new Claw(hardwareMap);
     }
 
     //@Override
@@ -50,11 +50,11 @@ public class TelopTest extends OpMode {
 
         extendo.Teleop(gamepad2,telemetry);
 
-        intake.objcatcher.Teleop(gamepad1, telemetry);
+        intake.objcatcher.Teleop(gamepad2, telemetry);
         intake.objlift.Teleop(gamepad2,telemetry);
 
-        claw.objgrabber.Teleop(gamepad2,telemetry);
-        claw.objflipper.Teleop(gamepad2,telemetry);
+        //claw.objgrabber.Teleop(gamepad2,telemetry);
+        //claw.objflipper.Teleop(gamepad2,telemetry);
 
         // Update Pose estimate
         drive.updatePoseEstimate();
@@ -62,11 +62,11 @@ public class TelopTest extends OpMode {
         //double maxDriveSpeed = 1.0;
         //double maxRotateSpeed = 0.75;
 
-        double maxDriveSpeed = 1.0 - map(clamp(elevator.getCurrentHeight() / 4000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.7);
-        double maxRotateSpeed = 0.75 - map(clamp(elevator.getCurrentHeight() / 4000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.4);
-        drive.driveWithController(gamepad1, maxDriveSpeed, maxRotateSpeed);
+        double maxDriveSpeed = 1.0 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.7);
+        double maxRotateSpeed = 0.75 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.4);
+        //drive.driveWithController(gamepad1, maxDriveSpeed, maxRotateSpeed);
 
-        //drive.driveFieldCentric(gamepad1);
+        drive.driveFieldCentric(gamepad1);
 
         telemetry.update();
 

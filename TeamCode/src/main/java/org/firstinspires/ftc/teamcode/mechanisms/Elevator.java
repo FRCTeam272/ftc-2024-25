@@ -25,7 +25,7 @@ public class Elevator {
     int armMax = 5;
     int armMin = 0;*/
 
-    int elevSlidePos = -2;
+    int elevSlidePos = 0;
 
     double elevTargetPos = 0;
 
@@ -44,8 +44,8 @@ public class Elevator {
         leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
         rightSlide = hardwareMap.get(DcMotorEx.class, "rightSlide");
 
-        leftSlide.setDirection(DcMotor.Direction.FORWARD);
-        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+        //rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -112,7 +112,7 @@ public class Elevator {
                 elevTargetPos = 0;
                 break;
             case 1: // Low Basket Pos
-                elevTargetPos = 93;
+                elevTargetPos = 6062;
                 break;
             case 2: // High Basket Pos
                 elevTargetPos = 93;

@@ -11,15 +11,27 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
+import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 
 
 @Autonomous
 public class TestAuton extends LinearOpMode {
 
+    private Extendo extendo=null;
+    private Intake intake=null;
+
+//    public class IntakeDown implements Action {
+//
+//    }
+
     @Override
     public void runOpMode() {
         Pose2d initialPose = new Pose2d(0,0,Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+
+        Extendo extendo = new Extendo(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
 
         //Build trajectories here
         TrajectoryActionBuilder toBasket = drive.actionBuilder(initialPose)

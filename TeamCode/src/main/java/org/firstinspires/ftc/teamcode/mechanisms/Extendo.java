@@ -15,7 +15,7 @@ public class Extendo {
 
     // AnalogInput armPNP;
 
-    TouchSensor extendoLimit;
+    //TouchSensor extendoLimit;
 
     private PIDFController extendoController;
     public static double extendoP = 0.1, extendoI = 0, extendoD = 0.00001, extendoFF = -0.001;
@@ -24,7 +24,7 @@ public class Extendo {
  int armMax = 5;
  int armMin = 0;*/
 
-    int extendoPos = -1;
+    int extendoPos = 0;
 
     double extendoTargetPos = 0;
 
@@ -48,7 +48,7 @@ public class Extendo {
 
         // armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
 
-        extendoLimit = hardwareMap.get(TouchSensor.class, "extendoLS");
+       // extendoLimit = hardwareMap.get(TouchSensor.class, "extendoLS");
 
         extendoController = new PIDFController(extendoP, extendoI, extendoD, extendoFF);
     }
@@ -56,12 +56,12 @@ public class Extendo {
     public void Teleop(Gamepad gamepad2, Telemetry telemetry){
 
         extendoPower = 0.5; // run at half power, full power tends to launch things!
-        if (extendoLimit.isPressed()) {
-            extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        } else {
+//        if (extendoLimit.isPressed()) {
+//            extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        } else {
             extendoM.setPower(gamepad2.right_stick_y * extendoPower);
-        }
+//        }
 
         if (extendoM.getCurrentPosition() >= 262) { //max position is 268, so set to something less
             extendoPower = 0;
@@ -107,17 +107,17 @@ public class Extendo {
         if (extendoPos != -1) {
 
             extendoPower = 0.5; // run at half power, full power tends to launch things!
-            if (extendoLimit.isPressed()) {
-                extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                extendoM.setTargetPosition(0);
-            } else {
-                extendoM.setTargetPosition((int) extendoTargetPos);
-            }
-
-            if (extendoM.getCurrentPosition() >= 262) { //max position is 268, so set to something less
-                extendoPower = 0;
-
-            }
+//            if (extendoLimit.isPressed()) {
+//                extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                extendoM.setTargetPosition(0);
+//            } else {
+//                extendoM.setTargetPosition((int) extendoTargetPos);
+//            }
+//
+//            if (extendoM.getCurrentPosition() >= 262) { //max position is 268, so set to something less
+//                extendoPower = 0;
+//
+//            }
 
             extendoM.setPower(extendoPower);
             extendoM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -149,9 +149,9 @@ public class Extendo {
  armR.setPower(armPower);
  } */
     }
-        public boolean getExtendoLimitState(){
-            return extendoLimit.isPressed();
-        }
+//        public boolean getExtendoLimitState(){
+//            return extendoLimit.isPressed();
+//        }
 
         public void runExtendo(double extendoPower){
             extendoM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -164,15 +164,15 @@ public class Extendo {
             extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
-        public void homeExtendo(){
-            if (extendoLimit.isPressed()){
-                extendoM.setPower(0);
-                extendoM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }else {
-                extendoM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                extendoM.setPower(-1);
-            }
+//        public void homeExtendo(){
+//            if (extendoLimit.isPressed()){
+//                extendoM.setPower(0);
+//                extendoM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            }else {
+//                extendoM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                extendoM.setPower(-1);
+//            }
 
 /* slideM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
  slideM.setPower(-1);
@@ -181,8 +181,8 @@ public class Extendo {
  }
  slideM.setPower(0);
  slideM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
- slideM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
-        }
+ slideM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }*/
 
         public void resetExtendoEncoder(){
             extendoM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

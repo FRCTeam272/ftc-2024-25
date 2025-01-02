@@ -47,7 +47,7 @@ public class Intake {
 
     public Intake(HardwareMap hardwareMap){ //motor mapping
         intakeLiftM = hardwareMap.get(DcMotorEx.class, "intakeFlop");
-        //intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
 
         intakeLiftM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeLiftM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -74,11 +74,11 @@ public class Intake {
             rightIntake.setPower(intakeSpeed *intakeState);
         }
 
-        public void Teleop(Gamepad gamepad1, Telemetry telemetry) { //Code to be run in Op Mode void Loop at top level
+        public void Teleop(Gamepad gamepad2, Telemetry telemetry) { //Code to be run in Op Mode void Loop at top level
 
             int intakeState = 0;
 
-            possession = sensorDistance.getDistance(DistanceUnit.CM) < 5; //todo set distance
+            possession = sensorDistance.getDistance(DistanceUnit.CM) < 32; //todo set distance
 
             if (togglePossession && possession) { //Only execute once per possession
                 togglePossession = false;
@@ -87,15 +87,15 @@ public class Intake {
             }
 
 
-            if (toggleIntake && gamepad1.dpad_down) {  // Only execute once per Button push
+            if (toggleIntake && gamepad2.dpad_down) {  // Only execute once per Button push
                 toggleIntake = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
-            } else if (!gamepad1.dpad_down) { //if neither button is being pressed
+            } else if (!gamepad2.dpad_down) { //if neither button is being pressed
                 toggleIntake = true; // Button has been released, so this allows a re-press to activate the code above.
             }
 
             if (!toggleIntake){ //Intake
                 intakeState = 1;
-            }else if (gamepad1.dpad_up){ //Reverse Intake
+            }else if (gamepad2.dpad_up){ //Reverse Intake
                 intakeState = -1;
             }else if (togglePossession){ //Stop Intake if there is a piece in it
                 intakeState = 0;
@@ -119,16 +119,16 @@ public class Intake {
             if (gamepad2.dpad_right) { // up position
                 intakePos = 0;
             }else if (gamepad2.dpad_left) { //down position
-                intakePos = 1;
+                intakePos = 2;
             }else if(!gamepad2.dpad_right && !gamepad2.dpad_left){
                 intakeLiftM.setPower(gamepad2.left_stick_y);
             }
 
             GoToPosition (intakePos, telemetry);
 
-            if(!gamepad2.dpad_right && !gamepad2.dpad_left){
-                intakeLiftM.setPower(gamepad2.left_stick_y);
-            }
+//            if(!gamepad2.dpad_right && !gamepad2.dpad_left){
+//                intakeLiftM.setPower(gamepad2.left_stick_y);
+//            }
         }
 
         public void GoToPosition(int position, Telemetry telemetry){
@@ -140,10 +140,10 @@ public class Intake {
                     intakeTargetPos = 0;
                     break;
                 case 1: // mid position
-                    intakeTargetPos = 20;
+                    intakeTargetPos = 400;
                     break;
                 case 2: // down position
-                    intakeTargetPos = 40;
+                    intakeTargetPos = 780;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected position value: " + position); // todo: remove in comp
@@ -158,7 +158,7 @@ public class Intake {
 
                 intakeLiftM.setTargetPosition((int) intakeTargetPos);
 
-                if (intakeLiftM.getCurrentPosition() >= 50){
+                if (intakeLiftM.getCurrentPosition() >= 5200){
                     intakeLiftPower = 0;
                 }
 
