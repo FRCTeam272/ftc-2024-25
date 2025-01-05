@@ -23,7 +23,7 @@ public class TelopTest extends OpMode {
     private Elevator elevator=null;
     private Extendo extendo=null;
     private Intake intake=null;
-    //private Claw claw=null;
+    private Claw claw=null;
 
     //@Override
     public void init() {
@@ -32,7 +32,7 @@ public class TelopTest extends OpMode {
         elevator = new Elevator(hardwareMap);
         extendo = new Extendo(hardwareMap);
         intake = new Intake(hardwareMap);
-        //claw = new Claw(hardwareMap);
+        claw = new Claw(hardwareMap);
     }
 
     //@Override
@@ -53,8 +53,8 @@ public class TelopTest extends OpMode {
         intake.objcatcher.Teleop(gamepad2, telemetry);
         intake.objlift.Teleop(gamepad2,telemetry);
 
-        //claw.objgrabber.Teleop(gamepad2,telemetry);
-        //claw.objflipper.Teleop(gamepad2,telemetry);
+        claw.objgrabber.Teleop(gamepad2,telemetry);
+        claw.objflipper.Teleop(gamepad2,telemetry);
 
         // Update Pose estimate
         drive.updatePoseEstimate();

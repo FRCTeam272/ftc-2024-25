@@ -11,7 +11,7 @@ public class MoveElevTogether extends OpMode {
     static DcMotor leftSlide;
 
 
-    //TouchSensor slideLimit;
+    TouchSensor slideLimit;
 
 
     public void init() {
@@ -21,11 +21,11 @@ public class MoveElevTogether extends OpMode {
 
 
         rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
-        //rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
 
         leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");
-        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+        //leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
 
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -37,6 +37,8 @@ public class MoveElevTogether extends OpMode {
 
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        slideLimit = hardwareMap.get(TouchSensor.class, "slideLS");
 
 
     }
@@ -52,16 +54,18 @@ public class MoveElevTogether extends OpMode {
         telemetry.addData("To reset Encoders", "Use Gamepad 1 A");
         telemetry.addData("right slide position", rightSlide.getCurrentPosition());
         telemetry.addData("left slide position", leftSlide.getCurrentPosition());
+        telemetry.addData("Elev Limit Switch", slideLimit.isPressed()); //print whether or not it is pressed
         telemetry.update();
 
 
         //Use A button to retract until limit switch is pressed, then reset encoder
         if (gamepad1.a){
-//            rightSlide.setPower(-1);
-//            while (!slideLimit.isPressed()){
-//
-//
-//            }
+
+            while (!slideLimit.isPressed()){
+                rightSlide.setPower(-0.5);
+                leftSlide.setPower(-0.5);
+
+            }
             rightSlide.setPower(0);
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

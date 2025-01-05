@@ -583,12 +583,27 @@ public final class MecanumDrive {
     }
 
     // TODO made from pitmode with try at getting heading from Pose TEST!
-    public void driveFieldCentric(Gamepad gamepad) {
-        double y = -gamepad.left_stick_y/2; // Remember, Y stick value is reversed
-        double x = gamepad.left_stick_x/2;
-        double rx = gamepad.right_stick_x/1.5;
+    public void driveFieldCentric(Gamepad gamepad1) {
+        double y = -gamepad1.left_stick_y/2; // Remember, Y stick value is reversed
+        double x = gamepad1.left_stick_x/2;
+        double rx = gamepad1.right_stick_x/1.5;
+
+        double fastpower;
+
+        // speed is 1/2 unless hold down turbo button
+        if(gamepad1.left_bumper)  {
+            fastpower = 1;
+        }
+        else {
+            fastpower = 2;
+        }
 
         double botHeading = pose.heading.toDouble();
+
+        //reset Yaw
+//        if(gamepad1.x){
+//            botHeading = 90;
+//        }
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -605,10 +620,12 @@ public final class MecanumDrive {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-        leftFront.setPower(frontLeftPower);
-        leftBack.setPower(backLeftPower);
-        rightFront.setPower(frontRightPower);
-        rightBack.setPower(backRightPower);
+
+
+        leftFront.setPower(frontLeftPower/fastpower);
+        leftBack.setPower(backLeftPower/fastpower);
+        rightFront.setPower(frontRightPower/fastpower);
+        rightBack.setPower(backRightPower/fastpower);
 
     }
 
