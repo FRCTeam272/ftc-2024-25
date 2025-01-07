@@ -50,8 +50,8 @@ public class Elevator {
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         //armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
