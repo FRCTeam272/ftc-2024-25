@@ -77,7 +77,7 @@ public class Elevator {
             }
 
         }
-        else if (!gamepad2.dpad_up && !gamepad2.dpad_down) { //if neither button is being pressed
+        else if (!gamepad1.dpad_up && !gamepad1.dpad_down) { //if neither button is being pressed
             toggleSlide = true; // Button has been released, so this allows a re-press to activate the code above.
         }
 
@@ -88,7 +88,7 @@ public class Elevator {
             elevSlidePos = 3;
         } else if (gamepad2.left_bumper) { // High Basket Pos
             elevSlidePos = 4;
-        } else if (gamepad1.b) { // Load Position
+        } else if (gamepad2.y) { // Load Position
             elevSlidePos = 2;
         }
 //        else if (gamepad1.a) { // Low Hang Pull Pos
