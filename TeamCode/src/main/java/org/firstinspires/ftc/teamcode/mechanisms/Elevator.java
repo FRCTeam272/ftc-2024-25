@@ -14,23 +14,23 @@ public class Elevator {
 
     DcMotorEx leftSlide, rightSlide;
 
-    AnalogInput elevPNP;
+//    AnalogInput elevPNP;
 
     TouchSensor slideLS;
 
 //    private PIDFController elevController;
 //    public static double elevP = 0.1, elevI = 0, elevD = 0.00001, elevFF = -0.001;
 
-/*    boolean toggleArm = true;
-    int armMax = 5;
-    int armMin = 0;*/
+    boolean toggleSlide = true;
+    int slideMax = 4;
+    int slideMin = 0;
 
     int elevSlidePos = -1;
 
     double elevTargetPos = 0;
 
 
-    // final double degpervoltage = 270/3.3;
+//    final double degpervoltage = 270/3.3;
 
     double elevPower = 0;
 
@@ -39,7 +39,7 @@ public class Elevator {
 //    final double slideConverter = 62.1 / 287.5;
 
 
-    public Elevator(HardwareMap hardwareMap) { //TODO added "void" when commenting out, remove once fixed
+    public Elevator(HardwareMap hardwareMap) {
 
         leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
         rightSlide = hardwareMap.get(DcMotorEx.class, "rightSlide");
@@ -50,6 +50,9 @@ public class Elevator {
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         //armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
 
@@ -59,45 +62,45 @@ public class Elevator {
     }
 
     public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {
-/*        if (toggleArm && (gamepad2.dpad_up || gamepad2.dpad_down)) {  // Only execute once per Button push
-            toggleArm = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
-            if (gamepad2.dpad_down) {  // If the d-pad up button is pressed
-                armSlidePos = armSlidePos - 1; //Increase Arm position
-                if (armSlidePos > armMax) { //If arm position is above 3
-                    armSlidePos = armMax; //Cap it at 3
+        if (toggleSlide && (gamepad1.dpad_up || gamepad1.dpad_down)) {  // Only execute once per Button push
+            toggleSlide = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
+            if (gamepad1.dpad_up) {  // If the d-pad up button is pressed
+                elevSlidePos = elevSlidePos + 1; //Increase elev position
+                if (elevSlidePos > slideMax) { //If arm position is above max
+                    elevSlidePos = slideMax; //Cap it at max
                 }
-            } else if (gamepad2.dpad_up) { // If d-pad down button is pressed
-                armSlidePos = armSlidePos + 1; //Decrease arm position
-                if (armSlidePos < armMin) { //If arm position is below -3
-                    armSlidePos = armMin; //cap it at -3
+            } else if (gamepad1.dpad_down) { // If d-pad down button is pressed
+                elevSlidePos = elevSlidePos - 1; //Decrease elev position
+                if (elevSlidePos < slideMin) { //If arm position is below min
+                    elevSlidePos = slideMin; //cap it at minimum
                 }
             }
 
         }
         else if (!gamepad2.dpad_up && !gamepad2.dpad_down) { //if neither button is being pressed
-            toggleArm = true; // Button has been released, so this allows a re-press to activate the code above.
-        }*/
-
-
-        if (gamepad2.x) { // Base Pos
-            elevSlidePos = 0;
-        } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
-            elevSlidePos = 1;
-        } else if (gamepad2.left_bumper) { // High Basket Pos
-            elevSlidePos = 2;
-        } else if (gamepad1.y) { // Low Hang Start Pos
-            elevSlidePos = 3;
-        } else if (gamepad1.a) { // Low Hang Pull Pos
-            elevSlidePos = 4;
-        } else if (gamepad2.right_trigger > 0.5) { // Low Specimen Pos
-            elevSlidePos = 5;
-        } else if (gamepad2.right_bumper) { // High Specimen Pos
-            elevSlidePos = 6;
-        } else if (gamepad2.b && elevSlidePos == 5) { // Low Specimen Pull Pos
-            elevSlidePos = 7;
-        } else if (gamepad2.b && elevSlidePos == 6) { // High Specimen Pull Pos
-            elevSlidePos = 8;
+            toggleSlide = true; // Button has been released, so this allows a re-press to activate the code above.
         }
+
+
+//        if (gamepad2.x) { // Base Pos
+//            elevSlidePos = 0;
+//        } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
+//            elevSlidePos = 1;
+//        } else if (gamepad2.left_bumper) { // High Basket Pos
+//            elevSlidePos = 2;
+//        } else if (gamepad1.y) { // Low Hang Start Pos
+//            elevSlidePos = 3;
+//        } else if (gamepad1.a) { // Low Hang Pull Pos
+//            elevSlidePos = 4;
+//        } else if (gamepad2.right_trigger > 0.5) { // Low Specimen Pos
+//            elevSlidePos = 5;
+//        } else if (gamepad2.right_bumper) { // High Specimen Pos
+//            elevSlidePos = 6;
+//        } else if (gamepad2.b && elevSlidePos == 5) { // Low Specimen Pull Pos
+//            elevSlidePos = 7;
+//        } else if (gamepad2.b && elevSlidePos == 6) { // High Specimen Pull Pos
+//            elevSlidePos = 8;
+//        }
 
 
         GoToPosition(elevSlidePos, telemetry);
@@ -114,67 +117,52 @@ public class Elevator {
             case 0: // Base Pos
                 elevTargetPos = 10;
                 break;
-            case 1: // Low Basket Pos
-                elevTargetPos = 4000;
+            case 1: // High Bar Pull Down  20.25"
+                elevTargetPos = 3600;
                 break;
-            case 2: // High Basket Pos
-                elevTargetPos = 4000;
+            case 2: // High Bar Place 26.75"
+                elevTargetPos = 6100;
                 break;
-            case 3: // Low Hang Start Pos
-                elevTargetPos = 3000;
+            case 3: // Low Basket Score 29"
+                elevTargetPos = 6500;
                 break;
-            case 4: // Low Hang Pull Pos
-                elevTargetPos = 2700;
+            case 4: // High Basket Score/Max
+                elevTargetPos = 9500;
                 break;
-            case 5: // Low Specimen Bar Pos
-                elevTargetPos = 1000;
-                break;
-            case 6: // High Specimen Bar Pos
-                elevTargetPos = 1000;
-                break;
-            case 7: // Low Specimen Pull Pos
-                elevTargetPos = 1000;
-                break;
-            case 8: // High Specimen Pull Pos
-                elevTargetPos = 1000;
-                break;
+
             default:
                 throw new IllegalStateException("Unexpected position value: " + position); // todo: remove in comp
         }
 
-
+        telemetry.addData("elev slide pos case", elevSlidePos);
         telemetry.addData("elev target pos", elevTargetPos);
 
-        if (elevSlidePos == -1){
-            this.elevPower = 0;
-        }
-        else
-//        if (elevSlidePos != -1)
-           {
 
-            this.elevPower = -0.5; // half power - A.S.
+        if (elevSlidePos != -1) {
+
+            elevPower = 0.5; // half power
             if (slideLS.isPressed()) {
-                leftSlide.setPower(0);
-                rightSlide.setPower(0);
                 leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                leftSlide.setTargetPosition(10);
+                rightSlide.setTargetPosition(10);
 
             } else {
                 leftSlide.setTargetPosition((int) elevTargetPos);
                 rightSlide.setTargetPosition((int) elevTargetPos);
             }
 
-            if (leftSlide.getCurrentPosition() >= 6010 || rightSlide.getCurrentPosition() >= 6010) { //max pos
-                this.elevPower = 0;
+            if (leftSlide.getCurrentPosition() >= 9600 || rightSlide.getCurrentPosition() >= 9600) { //max pos
+                elevPower = 0;
             }
 
-            leftSlide.setPower(this.elevPower);
+            leftSlide.setPower(elevPower);
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightSlide.setPower(this.elevPower);
+            rightSlide.setPower(elevPower);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
+    }
 
 //        double elevPower = (armController.calculate(getArmAngle(), armTargetPos));
 //
@@ -202,9 +190,9 @@ public class Elevator {
 //        armR.setPower(armPower);
 //    }
 //
-//    public boolean getSlideLimitState(){
-//        return slideLimit.isPressed();
-//    }
+    public boolean getSlideLimitState(){
+        return slideLS.isPressed();
+    }
 //
 //    public void runSlides(double slidePower){
 //        slideM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -217,7 +205,7 @@ public class Elevator {
 //        slideM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //    }
 //
-    }
+
 
     public void homeSlides() {
         if (slideLS.isPressed()) {
@@ -229,13 +217,17 @@ public class Elevator {
             leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         } else {
-            rightSlide.setPower(-1);
-            leftSlide.setPower(-1);
-        }
 
+            rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            rightSlide.setPower(-0.5);
+            leftSlide.setPower(-0.5);
+        }
+    }
 
 /*        slideM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideM.setPower(-1);
@@ -245,11 +237,12 @@ public class Elevator {
         slideM.setPower(0);
         slideM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
-    }
+
 //
-//    public void resetSlideEncoder(){
-//        slideM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//    }
+    public void resetSlideEncoder(){
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
     public double getCurrentHeight(){
         return leftSlide.getCurrentPosition();

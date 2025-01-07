@@ -158,7 +158,7 @@ public class Intake {
 
                 intakeLiftM.setTargetPosition((int) intakeTargetPos);
 
-                if (intakeLiftM.getCurrentPosition() >= 5200){
+                if (intakeLiftM.getCurrentPosition() >= 1000){
                     intakeLiftPower = 0;
                 }
 
