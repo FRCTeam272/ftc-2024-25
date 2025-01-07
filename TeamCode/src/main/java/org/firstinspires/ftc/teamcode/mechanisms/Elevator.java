@@ -82,15 +82,16 @@ public class Elevator {
         }
 
 
-//        if (gamepad2.x) { // Base Pos
-//            elevSlidePos = 0;
-//        } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
-//            elevSlidePos = 1;
-//        } else if (gamepad2.left_bumper) { // High Basket Pos
-//            elevSlidePos = 2;
-//        } else if (gamepad1.y) { // Low Hang Start Pos
-//            elevSlidePos = 3;
-//        } else if (gamepad1.a) { // Low Hang Pull Pos
+        if (gamepad2.x) { // Base Pos
+            elevSlidePos = 0;
+        } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
+            elevSlidePos = 3;
+        } else if (gamepad2.left_bumper) { // High Basket Pos
+            elevSlidePos = 4;
+        } else if (gamepad1.b) { // Load Position
+            elevSlidePos = 2;
+        }
+//        else if (gamepad1.a) { // Low Hang Pull Pos
 //            elevSlidePos = 4;
 //        } else if (gamepad2.right_trigger > 0.5) { // Low Specimen Pos
 //            elevSlidePos = 5;

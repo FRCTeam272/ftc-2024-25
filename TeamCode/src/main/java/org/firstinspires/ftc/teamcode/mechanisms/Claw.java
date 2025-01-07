@@ -95,7 +95,7 @@ public class Claw {
             ElapsedTime flipTimer = new ElapsedTime();
             flipTimer.reset();
 
-            while (flipTimer.milliseconds() <= 250) {
+            while (flipTimer.milliseconds() <= 500) {
                 leftFlipperS.setPower(1);
                 rightFlipperS.setPower(1);
             }
@@ -108,7 +108,7 @@ public class Claw {
             ElapsedTime flipTimer = new ElapsedTime();
             flipTimer.reset();
 
-            while (flipTimer.milliseconds() <= 250) {
+            while (flipTimer.milliseconds() <= 500) {
                 leftFlipperS.setPower(-1);
                 rightFlipperS.setPower(-1);
             }

@@ -21,10 +21,6 @@ public class TestAuton extends LinearOpMode {
     private Extendo extendo=null;
     private Intake intake=null;
 
-//    public class IntakeDown implements Action {
-//
-//    }
-
     @Override
     public void runOpMode() {
         Pose2d initialPose = new Pose2d(0,0,Math.toRadians(90));
