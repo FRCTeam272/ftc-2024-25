@@ -44,8 +44,8 @@ public class Elevator {
         leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
         rightSlide = hardwareMap.get(DcMotorEx.class, "rightSlide");
 
-        //leftSlide.setDirection(DcMotor.Direction.REVERSE);
-        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.REVERSE); //LS reversed worked on the table!
+        //rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

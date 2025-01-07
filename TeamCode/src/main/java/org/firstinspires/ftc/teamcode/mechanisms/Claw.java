@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -89,15 +90,31 @@ public class Claw {
 
     public class Flipper {
 
-//        public void flipInside() {
-//            leftFlipperS.setPosition(0);
-//            rightFlipperS.setPosition(0);
-//        }
-//
-//        public void flipOutside() {
-//            leftFlipperS.setPosition(1);
-//            rightFlipperS.setPosition(1);
-//        }
+        public void flipInside() { //powers briefly to send to inward facing hard stop
+
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 250) {
+                leftFlipperS.setPower(1);
+                rightFlipperS.setPower(1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+        }
+
+        public void flipOutside() { //powers briefly to flip to outward facing hard stop
+
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 250) {
+                leftFlipperS.setPower(-1);
+                rightFlipperS.setPower(-1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+        }
 
         public void Teleop(Gamepad gamepad2, Telemetry telemetry) {
             if (gamepad2.left_stick_y == 0) {
