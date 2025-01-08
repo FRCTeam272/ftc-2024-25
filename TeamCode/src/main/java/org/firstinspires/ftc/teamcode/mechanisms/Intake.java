@@ -50,18 +50,19 @@ public class Intake {
         intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
 
         intakeLiftM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeLiftM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeLiftM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeLiftM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftIntake = hardwareMap.get(CRServo.class, "leftIntake");
         rightIntake = hardwareMap.get(CRServo.class, "rightIntake");
 
-        leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightIntake.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftIntake.setDirection(CRServo.Direction.REVERSE);
+        rightIntake.setDirection(CRServo.Direction.FORWARD);
 
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorColor");
 
-        intakeLiftPController = new PIDController(p, i, d);
+        intakeLiftM.setTargetPosition(0);
+        intakeLiftM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         objcatcher = new Catcher();
         objlift = new Lift();
@@ -78,7 +79,7 @@ public class Intake {
 
             int intakeState = 0;
 
-            possession = sensorDistance.getDistance(DistanceUnit.CM) < 32; //todo set distance
+            possession = sensorDistance.getDistance(DistanceUnit.CM) < 3; //todo set distance
 
             if (togglePossession && possession) { //Only execute once per possession
                 togglePossession = false;
@@ -97,8 +98,10 @@ public class Intake {
                 intakeState = 1;
             }else if (gamepad2.dpad_up){ //Reverse Intake
                 intakeState = -1;
-            }else if (togglePossession){ //Stop Intake if there is a piece in it
-                intakeState = 0;
+//            }else if (!toggleIntake && !togglePossession) { //Stop Intake if there is a piece in it, once per possession
+//                intakeState = 0;
+
+
             }
 
             runIntake(intakeState);
@@ -120,15 +123,11 @@ public class Intake {
                 intakePos = 0;
             }else if (gamepad2.dpad_left) { //down position
                 intakePos = 2;
-            }else if(!gamepad2.dpad_right && !gamepad2.dpad_left){
-                intakeLiftM.setPower(gamepad2.left_stick_y);
             }
 
             GoToPosition (intakePos, telemetry);
 
-//            if(!gamepad2.dpad_right && !gamepad2.dpad_left){
-//                intakeLiftM.setPower(gamepad2.left_stick_y);
-//            }
+
         }
 
         public void GoToPosition(int position, Telemetry telemetry){
@@ -140,10 +139,10 @@ public class Intake {
                     intakeTargetPos = 0;
                     break;
                 case 1: // mid position
-                    intakeTargetPos = 400;
+                    intakeTargetPos = 200;
                     break;
                 case 2: // down position
-                    intakeTargetPos = 780;
+                    intakeTargetPos = 800;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected position value: " + position); // todo: remove in comp

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class RunClawShoulder extends OpMode {
@@ -20,6 +21,8 @@ public class RunClawShoulder extends OpMode {
 
     Gamepad currentGamepad1;
     Gamepad previousGamepad1;
+
+    ElapsedTime flipTimer;
 
 
 
@@ -42,6 +45,8 @@ public class RunClawShoulder extends OpMode {
 
         currentGamepad1 = new Gamepad();
         previousGamepad1 = new Gamepad();
+
+        flipTimer = new ElapsedTime();
 
     }
 
@@ -86,6 +91,56 @@ public class RunClawShoulder extends OpMode {
             leftFlipperS.setPower(gamepad1.left_stick_y);
         }
 
+        if (gamepad1.x){ //Flip Inward
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1200){
+                leftFlipperS.setPower(1); //inward flip positive
+                rightFlipperS.setPower(1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+        }
+
+        if (gamepad1.y) { //Flip Outward
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1250) {
+                leftFlipperS.setPower(-1); //outward flip negative
+                rightFlipperS.setPower(-1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+        }
+
+        if (gamepad1.b) { // Flip Out from stow
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1000) {
+                leftFlipperS.setPower(-1); //outward flip negative
+                rightFlipperS.setPower(-1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+        }
+
+        if (gamepad1.right_bumper) { //flip up and barely hold to score in basket
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 400) {
+                leftFlipperS.setPower(1); //inward flip postive
+                rightFlipperS.setPower(1);
+            }
+            while (flipTimer.milliseconds() >= 400 && flipTimer.milliseconds() <= 2000) {
+                leftFlipperS.setPower(0.08);
+                rightFlipperS.setPower(0.08);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+
+        }
     }
+
 }
+
 

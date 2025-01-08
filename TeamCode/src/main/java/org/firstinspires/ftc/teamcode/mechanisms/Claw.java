@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -48,15 +52,70 @@ public class Claw {
 
     }
 
+    public class OpenClaw implements Action { //open claw for Auto
+        private boolean init = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!init) {
+                clawS.setPosition(0.2);
+                if (clawS.getPosition() == 0.2){
+                    init = true; }
+            }
+            return false;
+        }
+    }
+
+    public Action openClaw() {
+        return new OpenClaw();
+    }
+
     public class Grabber {
 
-        public void openClaw() { //open claw for Auto
-            clawS.setPosition(clawOpenPos);
+        public class OpenClaw implements Action { //open claw for Auto
+            private boolean init = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!init) {
+                    clawS.setPosition(0.2);
+                    init = true;
+                }
+                return clawS.getPosition() > 0.1;
+            }
         }
 
-        public void closeClaw() { //close claw for Auto
-            clawS.setPosition(clawClosedPos);
+        public Action openClaw() {
+            return new OpenClaw();
         }
+//
+//        public class CloseClaw implements Action { //close claw for Auto
+//            @Override
+//            public boolean run(@NonNull TelemetryPacket packet) {
+//                clawS.setPosition(-0.2);
+//                return false;
+//            }
+//        }
+//
+//        public Action closeClaw() {
+//            return new CloseClaw();
+//        }
+
+//        public Action openClaw() {
+//            return new Action() {
+//                private boolean init = false;
+//
+//                @Override
+//                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                    if(!init) {
+//                        clawS.setPosition(0.2);
+//                        init = true;
+//                    }
+//                    return true;
+//                }
+//            };
+//        }
+
 
         public void Teleop(Gamepad gamepad2, Telemetry telemetry) {
 
@@ -95,7 +154,7 @@ public class Claw {
             ElapsedTime flipTimer = new ElapsedTime();
             flipTimer.reset();
 
-            while (flipTimer.milliseconds() <= 500) {
+            while (flipTimer.milliseconds() <= 1000) {
                 leftFlipperS.setPower(1);
                 rightFlipperS.setPower(1);
             }

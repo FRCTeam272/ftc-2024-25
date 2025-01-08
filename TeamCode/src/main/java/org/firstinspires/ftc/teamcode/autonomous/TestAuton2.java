@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -9,14 +14,15 @@ import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 
+@Autonomous
 public class TestAuton2 extends LinearOpMode {
 
-    enum State {
-        IDLE,
-        PARK
-    }
+//    enum State {
+//        IDLE,
+//        PARK
+//    }
 
-    State currentState = State.IDLE;
+   // State currentState = State.IDLE;
 
     int elevSlidePos = -1;
 
@@ -47,12 +53,17 @@ public class TestAuton2 extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        if (isStopRequested()) return;
+        //if (isStopRequested()) return;
 
-        //Tighten claw and flip carriage down
-        claw.objgrabber.closeClaw();
+        Actions.runBlocking(
+                //Tighten claw and flip carriage down
+                claw.openClaw()
 
-        claw.objflipper.flipOutside();
+        );
+
+
+
+
 
 
     }

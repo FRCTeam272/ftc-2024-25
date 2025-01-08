@@ -56,6 +56,12 @@ public class Elevator {
         leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+//        leftSlide.setTargetPosition(0);
+//        rightSlide.setTargetPosition(0);
+//
+//        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         //armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
 
@@ -149,19 +155,20 @@ public class Elevator {
 
         if (elevSlidePos != -1) {
 
-            elevPower = 0.5; // half power
+            elevPower = 0.75; // 3/4 power
             if (slideLS.isPressed()) {
                 leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                leftSlide.setTargetPosition(10);
-                rightSlide.setTargetPosition(10);
+                leftSlide.setTargetPosition(0);
+                rightSlide.setTargetPosition(0);
 
             } else {
                 leftSlide.setTargetPosition((int) elevTargetPos);
                 rightSlide.setTargetPosition((int) elevTargetPos);
             }
 
+            //Never going to happen?
             if (leftSlide.getCurrentPosition() >= 9600 || rightSlide.getCurrentPosition() >= 9600) { //max pos
                 elevPower = 0;
             }

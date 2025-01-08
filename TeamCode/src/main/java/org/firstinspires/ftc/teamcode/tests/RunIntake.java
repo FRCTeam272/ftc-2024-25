@@ -32,8 +32,8 @@ public class RunIntake extends OpMode {
         leftIntake = hardwareMap.get(CRServo.class, "leftIntake");
         rightIntake = hardwareMap.get(CRServo.class, "rightIntake");
 
-        leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightIntake.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftIntake.setDirection(CRServo.Direction.REVERSE);
+        rightIntake.setDirection(CRServo.Direction.FORWARD);
 
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorColor");
 
