@@ -22,7 +22,7 @@ public class Elevator {
 //    public static double elevP = 0.1, elevI = 0, elevD = 0.00001, elevFF = -0.001;
 
     boolean toggleSlide = true;
-    int slideMax = 4;
+    int slideMax = 5;
     int slideMin = 0;
 
     int elevSlidePos = -1;
@@ -50,6 +50,9 @@ public class Elevator {
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -62,33 +65,35 @@ public class Elevator {
     }
 
     public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {
-        if (toggleSlide && (gamepad1.dpad_up || gamepad1.dpad_down)) {  // Only execute once per Button push
-            toggleSlide = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
-            if (gamepad1.dpad_up) {  // If the d-pad up button is pressed
-                elevSlidePos = elevSlidePos + 1; //Increase elev position
-                if (elevSlidePos > slideMax) { //If arm position is above max
-                    elevSlidePos = slideMax; //Cap it at max
-                }
-            } else if (gamepad1.dpad_down) { // If d-pad down button is pressed
-                elevSlidePos = elevSlidePos - 1; //Decrease elev position
-                if (elevSlidePos < slideMin) { //If arm position is below min
-                    elevSlidePos = slideMin; //cap it at minimum
-                }
-            }
-
-        }
-        else if (!gamepad1.dpad_up && !gamepad1.dpad_down) { //if neither button is being pressed
-            toggleSlide = true; // Button has been released, so this allows a re-press to activate the code above.
-        }
+//        if (toggleSlide && (gamepad1.dpad_up || gamepad1.dpad_down)) {  // Only execute once per Button push
+//            toggleSlide = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
+//            if (gamepad1.dpad_up) {  // If the d-pad up button is pressed
+//                elevSlidePos = elevSlidePos + 1; //Increase elev position
+//                if (elevSlidePos > slideMax) { //If arm position is above max
+//                    elevSlidePos = slideMax; //Cap it at max
+//                }
+//            } else if (gamepad1.dpad_down) { // If d-pad down button is pressed
+//                elevSlidePos = elevSlidePos - 1; //Decrease elev position
+//                if (elevSlidePos < slideMin) { //If arm position is below min
+//                    elevSlidePos = slideMin; //cap it at minimum
+//                }
+//            }
+//
+//        }
+//        else if (!gamepad1.dpad_up && !gamepad1.dpad_down) { //if neither button is being pressed
+//            toggleSlide = true; // Button has been released, so this allows a re-press to activate the code above.
+//        }
 
 
         if (gamepad2.x) { // Base Pos
             elevSlidePos = 0;
         } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
-            elevSlidePos = 3;
-        } else if (gamepad2.left_bumper) { // High Basket Pos
             elevSlidePos = 4;
+        } else if (gamepad2.left_bumper) { // High Basket Pos
+            elevSlidePos = 5;
         } else if (gamepad2.y) { // Load Position
+            elevSlidePos = 1;
+        } else if (gamepad2.b) { //High Bar Score/Safe load Flip
             elevSlidePos = 2;
         }
 //        else if (gamepad1.a) { // Low Hang Pull Pos
@@ -118,16 +123,19 @@ public class Elevator {
             case 0: // Base Pos
                 elevTargetPos = 10;
                 break;
-            case 1: // High Bar Pull Down  20.25"
-                elevTargetPos = 3600;
+            case 1: // Load Pos
+                elevTargetPos = 800;
                 break;
-            case 2: // High Bar Place 26.75"
+            case 2: // safe flip
+                elevTargetPos = 1800;
+                break;
+            case 3: // High Bar Place 26.75"
                 elevTargetPos = 6100;
                 break;
-            case 3: // Low Basket Score 29"
+            case 4: // Low Basket Score 29"
                 elevTargetPos = 6500;
                 break;
-            case 4: // High Basket Score/Max
+            case 5: // High Basket Score/Max
                 elevTargetPos = 9500;
                 break;
 
@@ -213,14 +221,15 @@ public class Elevator {
             rightSlide.setPower(0);
             leftSlide.setPower(0);
 
-            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 //            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        } else {
+        } else { //test set run to position to -1000 or something to cover where it was in auton
 
             rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

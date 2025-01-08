@@ -37,8 +37,8 @@ public class RunClawShoulder extends OpMode {
 
         clawIsOpen = false;
 
-        clawOpenPos = 0.5;
-        clawClosedPos = 0.2;
+        clawOpenPos = 0.2;
+        clawClosedPos = -0.2;
 
         currentGamepad1 = new Gamepad();
         previousGamepad1 = new Gamepad();

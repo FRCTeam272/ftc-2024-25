@@ -37,8 +37,8 @@ public class Claw {
 
         clawIsOpen = false; //toggle so that we can use one button for this
 
-        clawOpenPos = 0.5;
-        clawClosedPos = 0.2;
+        clawOpenPos = 0.2;
+        clawClosedPos = -0.2;
 
         currentGamepad2 = new Gamepad();
         previousGamepad2 = new Gamepad();
@@ -121,8 +121,8 @@ public class Claw {
                 rightFlipperS.setPower(0);
                 leftFlipperS.setPower(0);
             } else if (gamepad2.left_stick_y != 0) {
-                rightFlipperS.setPower(gamepad2.left_stick_y);
-                leftFlipperS.setPower(gamepad2.left_stick_y);
+                rightFlipperS.setPower(-gamepad2.left_stick_y);
+                leftFlipperS.setPower(-gamepad2.left_stick_y);
 
 //            telemetry.addData("Flipper Left servo position", leftFlipperS.getPosition());
 //            telemetry.addData("Flipper Right servo position", rightFlipperS.getPosition());
