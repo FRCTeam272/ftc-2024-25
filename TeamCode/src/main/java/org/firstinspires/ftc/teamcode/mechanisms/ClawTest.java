@@ -24,8 +24,10 @@ public class ClawTest {
         }
     }
 
-        public Action openClaw() {
-            return new OpenClaw();
-        }
+    public Action openClaw() {
+
+        return new OpenClaw();
     }
+
+
 }
