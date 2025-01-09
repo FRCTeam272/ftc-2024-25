@@ -109,6 +109,8 @@ public class BasketAuton extends LinearOpMode {
                         elevator.scoreHigh()
                 ),
 
+                new SleepAction(2),
+
                 //score Preload
                 new ParallelAction(
                         depositSample,
@@ -122,11 +124,16 @@ public class BasketAuton extends LinearOpMode {
                         elevator.load(),
                         driveSample1
                 ),
+
+                new SleepAction(2),
+
+                // lower intake and slowly push out extendo while intakinng
                 intake.lower(),
                 new ParallelAction(
                         extendo.extend(),
                         intake.floorIntake()
-                )
+                ),
+                new SleepAction(2)
 
         ));
     }
