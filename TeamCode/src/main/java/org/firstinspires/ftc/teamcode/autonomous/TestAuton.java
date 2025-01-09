@@ -31,10 +31,10 @@ public class TestAuton extends LinearOpMode {
 
         //Build trajectories here
         TrajectoryActionBuilder toBasket = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(0,24))
+                .strafeTo(new Vector2d(24,2))
                 .waitSeconds(1);
         Action trajectoryActionCloseOut = toBasket.fresh()
-                .strafeTo(new Vector2d(0,12))
+                .strafeTo(new Vector2d(25,2))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
