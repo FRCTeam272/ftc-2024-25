@@ -15,10 +15,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Claw {
 
     //Instantiate motor variables
-    ServoImplEx clawS;
+    private ServoImplEx clawS;
 
-    CRServo leftFlipperS;
-    CRServo rightFlipperS;
+    private CRServo leftFlipperS;
+    private CRServo rightFlipperS;
 
     boolean clawIsOpen;
     double clawOpenPos;
@@ -52,17 +52,12 @@ public class Claw {
 
     }
 
+    // Open Claw for Auton
     public class OpenClaw implements Action { //open claw for Auto
-        private boolean init = false;
-
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (!init) {
-                clawS.setPosition(0.2);
-                if (clawS.getPosition() == 0.2){
-                    init = true; }
-            }
-            return false;
+               clawS.setPosition(clawOpenPos);
+               return false;
         }
     }
 
@@ -70,52 +65,119 @@ public class Claw {
         return new OpenClaw();
     }
 
-    public class Grabber {
+    // Close Claw for Auton
+    public class CloseClaw implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            clawS.setPosition(clawClosedPos);
+            return false;
+        }
+    }
 
-        public class OpenClaw implements Action { //open claw for Auto
-            private boolean init = false;
+    public Action closeClaw() {
+        return new CloseClaw();
+    }
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!init) {
-                    clawS.setPosition(0.2);
-                    init = true;
-                }
-                return clawS.getPosition() > 0.1;
+    // Flip from Stow for Auton
+    public class FlipStow implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1000) {
+                leftFlipperS.setPower(-1); //negative power flips outward
+                rightFlipperS.setPower(-1);
             }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+            return false;
         }
+    }
 
-        public Action openClaw() {
-            return new OpenClaw();
+    public Action flipStow() {
+        return new FlipStow();
+    }
+
+    // Flip Outward from inner hard stop for Auton
+    public class FlipOut implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1250) {
+                leftFlipperS.setPower(-1); //negative power flips outward
+                rightFlipperS.setPower(-1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+            return false;
         }
-//
-//        public class CloseClaw implements Action { //close claw for Auto
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket packet) {
-//                clawS.setPosition(-0.2);
-//                return false;
-//            }
-//        }
-//
-//        public Action closeClaw() {
-//            return new CloseClaw();
-//        }
+    }
 
-//        public Action openClaw() {
-//            return new Action() {
-//                private boolean init = false;
-//
-//                @Override
-//                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                    if(!init) {
-//                        clawS.setPosition(0.2);
-//                        init = true;
-//                    }
-//                    return true;
-//                }
-//            };
-//        }
+    public Action flipOut() {
+        return new FlipOut();
+    }
 
+    // Flip Inward from outer hard stop for Auton
+    public class FlipIn implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            while (flipTimer.milliseconds() <= 1200) {
+                leftFlipperS.setPower(1); //positive power flips inward
+                rightFlipperS.setPower(1);
+            }
+            leftFlipperS.setPower(0);
+            rightFlipperS.setPower(0);
+            return false;
+        }
+    }
+
+    public Action flipIn() {
+        return new FlipIn();
+    }
+
+    // For Auton, 2.5 seconds long
+    // Raise Grabber and partially hold it up while opening Claw to score in the high basket, then continue flip to load position
+    public class BasketRaise implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime flipTimer = new ElapsedTime();
+            flipTimer.reset();
+
+            // Powers flipper just enough to raise it, then tries to hold it at low power for a second.
+            while (flipTimer.milliseconds() <= 400) { // partially raise claw
+                leftFlipperS.setPower(1);
+                rightFlipperS.setPower(1);
+            }
+            while (flipTimer.milliseconds() >=400 && flipTimer.milliseconds() <= 600) { // hold claw up
+                leftFlipperS.setPower(0.08);
+                rightFlipperS.setPower(0.08);
+            }
+            while (flipTimer.milliseconds() >=600 && flipTimer.milliseconds() <= 2000) { // open claw while continuing to hold up
+                clawS.setPosition(clawOpenPos);
+                leftFlipperS.setPower(0.08);
+                rightFlipperS.setPower(0.08);
+            }
+            while (flipTimer.milliseconds() >=2000 && flipTimer.milliseconds() <= 2500) { // continue flip to load position
+                leftFlipperS.setPower(1);
+                rightFlipperS.setPower(1);
+            }
+            leftFlipperS.setPower(0); //let claw drop inward, open to get next Sample
+            rightFlipperS.setPower(0);
+            return false;
+        }
+    }
+
+    public Action basketRaise() {
+        return new BasketRaise();
+    }
+
+    public class Grabber {
 
         public void Teleop(Gamepad gamepad2, Telemetry telemetry) {
 

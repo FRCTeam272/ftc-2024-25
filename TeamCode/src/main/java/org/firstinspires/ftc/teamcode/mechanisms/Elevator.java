@@ -1,4 +1,10 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,7 +31,7 @@ public class Elevator {
     int slideMax = 5;
     int slideMin = 0;
 
-    int elevSlidePos = -1;
+    int elevSlidePos = -2;
 
     double elevTargetPos = 0;
 
@@ -68,6 +74,45 @@ public class Elevator {
         slideLS = hardwareMap.get(TouchSensor.class, "slideLS");
 
        // elevController = new PIDFController(elevP, elevI, elevD, elevFF);
+    }
+
+    // Move Elevator to Position "Stow"
+    public class Stow implements Action { //lower to stow position for the end of Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            GoToPosition(-1, telemetry);
+            return false;
+        }
+    }
+
+    public Action stow() {
+        return new Stow();
+    }
+
+    // Move Elevator to Position "Load from Intake"
+    public class Load implements Action { //set height and open claw to load for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            GoToPosition(1, telemetry);
+            return false;
+        }
+    }
+
+    public Action load() {
+        return new Load();
+    }
+
+    // Move Elevator to Position "Score in High Basket"
+    public class ScoreHigh implements Action { //raise to High Basket for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            GoToPosition(5, telemetry);
+            return false;
+        }
+    }
+
+    public Action scoreHigh() {
+        return new ScoreHigh();
     }
 
     public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {
@@ -123,7 +168,10 @@ public class Elevator {
         elevSlidePos = position; // to update in auto,
 
         switch (elevSlidePos) {
-            case -1: // Start Pos
+            case -2: // Start Pos
+                elevTargetPos = 0;
+                break;
+            case -1: // Zero Pos
                 elevTargetPos = 0;
                 break;
             case 0: // Base Pos
@@ -153,9 +201,9 @@ public class Elevator {
         telemetry.addData("elev target pos", elevTargetPos);
 
 
-        if (elevSlidePos != -1) {
+        if (elevSlidePos != -2) {
 
-            elevPower = 0.75; // 3/4 power
+            elevPower = 1; // full power
             if (slideLS.isPressed()) {
                 leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

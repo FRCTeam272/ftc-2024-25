@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -28,6 +32,34 @@ public class Extendo {
         extendoM.setTargetPosition(0);
         extendoM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+    }
+
+    // Stow Extendo for Auton
+    public class Stow implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            extendoM.setPower(0.5);
+            extendoM.setTargetPosition(0);
+            return false;
+        }
+    }
+
+    public Action stow() {
+        return new Stow();
+    }
+
+    // Slowly push out Extendo for Auton
+    public class Extend implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            extendoM.setPower(0.25);
+            extendoM.setTargetPosition(300);
+            return false;
+        }
+    }
+
+    public Action extend() {
+        return new Extend();
     }
 
     public void Teleop(Gamepad gamepad2, Telemetry telemetry) {

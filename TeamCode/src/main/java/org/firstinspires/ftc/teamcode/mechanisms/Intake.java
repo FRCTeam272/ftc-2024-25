@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -69,7 +74,77 @@ public class Intake {
 
         }
 
+    // Lower Intake for Auton
+    public class Lower implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intakeLiftM.setTargetPosition(800);
+            return false;
+        }
+    }
+
+    public Action lower() {
+        return new Lower();
+    }
+
+    // Raise Intake for Auton
+    public class Raise implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intakeLiftM.setTargetPosition(0);
+            return false;
+        }
+    }
+
+    public Action raise() {
+        return new Raise();
+    }
+
+    // Run Intake Inward for 5 seconds Auton and then lift Intake
+    public class FloorIntake implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime intakeTimer = new ElapsedTime();
+            intakeTimer.reset();
+
+            while (!objcatcher.getPossession() || intakeTimer.milliseconds() <= 5000 ){
+                leftIntake.setPower(1);
+                rightIntake.setPower(1);
+            }
+            leftIntake.setPower(0);
+            rightIntake.setPower(0);
+            intakeLiftM.setTargetPosition(0);
+            return false;
+        }
+    }
+
+    public Action floorIntake() {
+        return new FloorIntake();
+    }
+
+    // Run Intake Inward for 5 seconds or until sample has gone through for Auton
+    public class LoadIntake implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ElapsedTime intakeTimer = new ElapsedTime();
+            intakeTimer.reset();
+
+            while (objcatcher.getPossession() || intakeTimer.milliseconds() <= 5000 ){
+                leftIntake.setPower(1);
+                rightIntake.setPower(1);
+            }
+            leftIntake.setPower(0);
+            rightIntake.setPower(0);
+            return false;
+        }
+    }
+
+    public Action loadIntake() {
+        return new LoadIntake();
+    }
+
     public class Catcher {
+
         public void runIntake(double intakeState){ // 1 is intake, 0 is off, -1 is outtake
             leftIntake.setPower(intakeSpeed *intakeState);
             rightIntake.setPower(intakeSpeed *intakeState);
