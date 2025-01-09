@@ -79,6 +79,10 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             intakeLiftM.setTargetPosition(800);
+            while (intakeLiftM.getCurrentPosition() <= 799) {
+                intakeLiftM.setPower(1);
+            }
+            intakeLiftM.setPower(0);
             return false;
         }
     }
@@ -107,13 +111,17 @@ public class Intake {
             ElapsedTime intakeTimer = new ElapsedTime();
             intakeTimer.reset();
 
-            while (!objcatcher.getPossession() || intakeTimer.milliseconds() <= 5000 ){
+            while (sensorDistance.getDistance(DistanceUnit.CM) < 4 || intakeTimer.milliseconds() <= 3500 ){
                 leftIntake.setPower(1);
                 rightIntake.setPower(1);
             }
             leftIntake.setPower(0);
             rightIntake.setPower(0);
             intakeLiftM.setTargetPosition(0);
+            while (intakeLiftM.getCurrentPosition() >= 1) {
+                intakeLiftM.setPower(-1);
+            }
+            intakeLiftM.setPower(0);
             return false;
         }
     }

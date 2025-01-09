@@ -208,8 +208,8 @@ public class Elevator {
                 leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                leftSlide.setTargetPosition(0);
-                rightSlide.setTargetPosition(0);
+                leftSlide.setTargetPosition((int) elevTargetPos);
+                rightSlide.setTargetPosition((int) elevTargetPos);
 
             } else {
                 leftSlide.setTargetPosition((int) elevTargetPos);
