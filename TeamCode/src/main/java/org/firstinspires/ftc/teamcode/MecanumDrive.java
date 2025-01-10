@@ -598,14 +598,14 @@ public final class MecanumDrive {
             fastpower = 2;
         }
 
-        double botHeading = pose.heading.toDouble();
-
-//        reset Pose (by zeroing the encoders)
+        //        reset Pose (by zeroing the encoders)
         if(gamepad1.x){
             leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
+
+        double botHeading = pose.heading.toDouble();
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
