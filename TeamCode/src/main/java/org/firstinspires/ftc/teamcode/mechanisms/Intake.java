@@ -54,7 +54,9 @@ public class Intake {
         intakeLiftM = hardwareMap.get(DcMotorEx.class, "intakeFlop");
         intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        intakeLiftM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Disabled so that it doesn't reset between Auton & Teleop
+//        intakeLiftM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         intakeLiftM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeLiftM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

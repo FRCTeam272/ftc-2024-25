@@ -10,7 +10,6 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Claw;
@@ -20,7 +19,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 
 
 @Config
-@Autonomous
+@Autonomous (name="Basket_Side_Auton", group="Auto")
 public class BasketAuton extends LinearOpMode {
 
     // Pose to approach basket head on
@@ -42,7 +41,12 @@ public class BasketAuton extends LinearOpMode {
     public static double sample2Y = -49;
     public static double sample2H = Math.toRadians(90);
 
-    // Pose to go park (park is approach, parkCreep amount to creep forward to park)
+    // Pose to reset localizer for Teleop
+    public static double resetX = -50;
+    public static double resetY = -50;
+    public static double resetH = Math.toRadians(90);
+
+    // Optional Pose to go park (park is approach, parkCreep amount to creep forward to park)
     public static double parkX = -48;
     public static double parkY = -12;
     public static double parkXCreep = 20;
@@ -88,6 +92,10 @@ public class BasketAuton extends LinearOpMode {
 
         Action depositSample2 = drive.actionBuilder(new Pose2d(depositApproachX, depositApproachY, depositSampleH))
                 .strafeTo(new Vector2d(depositSampleX, depositSampleY))
+                .build();
+
+        Action resetPose = drive.actionBuilder(new Pose2d(depositSampleX, depositSampleY,depositSampleH))
+                .strafeToLinearHeading(new Vector2d(resetX,resetY),resetH)
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
@@ -167,7 +175,7 @@ public class BasketAuton extends LinearOpMode {
                                 new SleepAction(3),
                                 intake.stopIntake(),
                                 claw.closeClaw(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.5),
                                 elevator.scoreLow(),
                                 new SleepAction(0.5),
                                 claw.flipOut(),
@@ -177,9 +185,10 @@ public class BasketAuton extends LinearOpMode {
                 ),
 
                 //Score Sample 1
-                depositSample1,
-                claw.openClaw(),
-
+                new SequentialAction(
+                        depositSample1,
+                        claw.openClaw()
+                ),
 
                 // Drive to Sample 2, while lowering elev and flipping claw in
                 new ParallelAction(
@@ -225,7 +234,7 @@ public class BasketAuton extends LinearOpMode {
                                 new SleepAction(3),
                                 intake.stopIntake(),
                                 claw.closeClaw(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.5),
                                 elevator.scoreLow(),
                                 new SleepAction(0.5),
                                 claw.flipOut(),
@@ -235,38 +244,16 @@ public class BasketAuton extends LinearOpMode {
                 ),
 
                 //Score Sample 2
-                depositSample2,
-                claw.openClaw(),
+                new SequentialAction(
+                        depositSample2,
+                        claw.openClaw()
+                ),
 
-
-
-
-
-//
-//                //score Preload
-//                new ParallelAction(
-//                        depositSample,
-//                        claw.basketRaise()
-//                ),
-//
-//               new SleepAction(2),
-//
-//                //drive to first sample while lowering elevator to load
-//               // new ParallelAction(
-//                //        elevator.load(),
-//                        driveSample1,
-//               // ),
-//
-//                new SleepAction(2),
-//
-//                // lower intake and slowly push out extendo while intakinng
-//                intake.lower(),
-//                new ParallelAction(
-//                        extendo.extend(),
-//                        intake.floorIntake()
-//                ),
-                new SleepAction(1)
+                // move back and turn slightly to have intake forward for teleop
+                resetPose
 
         ));
+
+
     }
 }

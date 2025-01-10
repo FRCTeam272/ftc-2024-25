@@ -35,14 +35,7 @@ public class Elevator {
 
     double elevTargetPos = 0;
 
-
-//    final double degpervoltage = 270/3.3;
-
     double elevPower = 0;
-
-//    final double slideCountsPerInch = 19970.0 / 5.0; //Counts Per Inch
-//
-//    final double slideConverter = 62.1 / 287.5;
 
 
     public Elevator(HardwareMap hardwareMap) {
@@ -56,24 +49,22 @@ public class Elevator {
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+//      Disabled so that motor encoders don't reset between auton and teleop!!!!!
+//        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
         leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftSlide.setTargetPosition(0);
-        rightSlide.setTargetPosition(0);
+//        leftSlide.setTargetPosition(0);
+//        rightSlide.setTargetPosition(0);
+//
+//        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        //armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
 
         slideLS = hardwareMap.get(TouchSensor.class, "slideLS");
 
-       // elevController = new PIDFController(elevP, elevI, elevD, elevFF);
     }
 
     // Move Elevator to Position "Stow"
@@ -85,6 +76,9 @@ public class Elevator {
 
             leftSlide.setTargetPosition(0);
             rightSlide.setTargetPosition(0);
+
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -102,6 +96,10 @@ public class Elevator {
 
             leftSlide.setTargetPosition(780);
             rightSlide.setTargetPosition(780);
+
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             return false;
         }
     }
@@ -119,6 +117,9 @@ public class Elevator {
 
             leftSlide.setTargetPosition(9500);
             rightSlide.setTargetPosition(9500);
+
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -136,6 +137,9 @@ public class Elevator {
 
             leftSlide.setTargetPosition(6500);
             rightSlide.setTargetPosition(6500);
+
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -207,7 +211,7 @@ public class Elevator {
                 elevTargetPos = 10;
                 break;
             case 1: // Load Pos
-                elevTargetPos = 800;
+                elevTargetPos = 780;
                 break;
             case 2: // safe flip
                 elevTargetPos = 1800;
@@ -257,32 +261,7 @@ public class Elevator {
         }
     }
 
-//        double elevPower = (armController.calculate(getArmAngle(), armTargetPos));
-//
-//        double currentIntake = intake.objpivot.getIntakeAngle(telemetry);
-//        double targetIntake = intake.objpivot.getIntakeTargetPos();
-//
-//        if ((!((currentIntake > (targetIntake-5)) && (currentIntake < (targetIntake+5)))) && armSlidePos == 0){
-//            elevPower = 0;
-//            //telemetry.addData("inside", "arm stopper");
-//        }
-//
-//        elevPower *= 0.5;
-//
-//        //telemetry.addData("inside range", !((currentIntake > (targetIntake-5)) && (currentIntake < (targetIntake+5))));
-//        //telemetry.addData("on arm pos 0", armSlidePos != 0);
-//        armL.setPower(elevPower);
-//        armR.setPower(elevPower);
-//
-//    }
-//
-//    public void setArmPos(int tarPos){
-//        double armPower = (armController.calculate(getArmAngle(), tarPos));
-//
-//        armL.setPower(armPower);
-//        armR.setPower(armPower);
-//    }
-//
+
     public boolean getSlideLimitState(){
         return slideLS.isPressed();
     }

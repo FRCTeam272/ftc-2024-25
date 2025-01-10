@@ -27,7 +27,7 @@ public class RunIntake extends OpMode {
         intakeFlop = hardwareMap.get(DcMotorEx.class, "intakeFlop");
         intakeFlop.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeFlop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeFlop.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeFlop.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftIntake = hardwareMap.get(CRServo.class, "leftIntake");
         rightIntake = hardwareMap.get(CRServo.class, "rightIntake");
@@ -55,7 +55,7 @@ public class RunIntake extends OpMode {
         if (gamepad1.x) {
             intakeFlop.setPower(0);
             intakeFlop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            intakeFlop.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeFlop.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         //use GP1 right stick to move Flop
