@@ -27,9 +27,19 @@ public class BasketAuton extends LinearOpMode {
     public static double depositApproachY = -48;
 
     // Pose to score in basket
-    public static double depositSampleX = -58;
-    public static double depositSampleY = -58;
+    public static double depositSampleX = -59.5;
+    public static double depositSampleY = -59.5;
     public static double depositSampleH = Math.toRadians(45);
+
+    // Pose to score in basket
+    public static double depositSample1X = -60;
+    public static double depositSample1Y = -60;
+    public static double depositSample1H = Math.toRadians(45);
+
+    // Pose to score in basket
+    public static double depositSample2X = -60;
+    public static double depositSample2Y = -60;
+    public static double depositSample2H = Math.toRadians(45);
 
     // Pose to pick up Sample 1
     public static double sample1X = -48;
@@ -79,10 +89,10 @@ public class BasketAuton extends LinearOpMode {
                 .build();
 
         Action depositSample1 = drive.actionBuilder(new Pose2d(depositApproachX, depositApproachY, depositSampleH))
-                .strafeTo(new Vector2d(depositSampleX, depositSampleY))
+                .strafeTo(new Vector2d(depositSample1X, depositSample1Y))
                 .build();
 
-        Action driveSample2 = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
+        Action driveSample2 = drive.actionBuilder(new Pose2d(depositSample1X,depositSample1Y,depositSampleH))
                 .strafeToLinearHeading(new Vector2d(sample2X, sample2Y),sample2H)
                 .build();
 
@@ -91,10 +101,10 @@ public class BasketAuton extends LinearOpMode {
                 .build();
 
         Action depositSample2 = drive.actionBuilder(new Pose2d(depositApproachX, depositApproachY, depositSampleH))
-                .strafeTo(new Vector2d(depositSampleX, depositSampleY))
+                .strafeTo(new Vector2d(depositSample2X, depositSample2Y))
                 .build();
 
-        Action resetPose = drive.actionBuilder(new Pose2d(depositSampleX, depositSampleY,depositSampleH))
+        Action resetPose = drive.actionBuilder(new Pose2d(depositSample2X, depositSample2Y,depositSampleH))
                 .strafeToLinearHeading(new Vector2d(resetX,resetY),resetH)
                 .build();
 
@@ -119,6 +129,7 @@ public class BasketAuton extends LinearOpMode {
 
                 // Score Preload
                 claw.closeClaw(),
+                elevator.stow(),
                 new ParallelAction(
                         approachBasket0,
                         elevator.scoreLow(),
@@ -130,12 +141,14 @@ public class BasketAuton extends LinearOpMode {
                 ),
                 depositSample,
                 claw.openClaw(),
+                new SleepAction(0.5),
 
                 // Drive to Sample 1, while lowering elev and flipping claw in
                 new ParallelAction(
                         driveSample1,
                         elevator.load(),
                         new SequentialAction(
+                                new SleepAction(0.25),
                                 claw.flipIn(),
                                 new SleepAction(2),
                                 claw.flipStop()
@@ -187,7 +200,8 @@ public class BasketAuton extends LinearOpMode {
                 //Score Sample 1
                 new SequentialAction(
                         depositSample1,
-                        claw.openClaw()
+                        claw.openClaw(),
+                        new SleepAction(0.5)
                 ),
 
                 // Drive to Sample 2, while lowering elev and flipping claw in
@@ -195,6 +209,7 @@ public class BasketAuton extends LinearOpMode {
                         driveSample2,
                         elevator.load(),
                         new SequentialAction(
+                                new SleepAction(0.25),
                                 claw.flipIn(),
                                 new SleepAction(2),
                                 claw.flipStop()
@@ -246,11 +261,15 @@ public class BasketAuton extends LinearOpMode {
                 //Score Sample 2
                 new SequentialAction(
                         depositSample2,
-                        claw.openClaw()
+                        claw.openClaw(),
+                        new SleepAction(0.5)
                 ),
 
                 // move back and turn slightly to have intake forward for teleop
-                resetPose
+                new ParallelAction(
+                        elevator.load(),
+                        resetPose
+                )
 
         ));
 

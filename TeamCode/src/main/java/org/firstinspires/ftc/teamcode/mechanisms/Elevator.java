@@ -68,7 +68,7 @@ public class Elevator {
     }
 
     // Move Elevator to Position "Stow"
-    public class Stow implements Action { //lower to stow position for the end of Auto
+    public class Stow implements Action { //set to stow position for the beginning of Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             leftSlide.setPower(1);
@@ -91,14 +91,12 @@ public class Elevator {
     public class Load implements Action { //set height and open claw to load for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            leftSlide.setPower(1);
-            rightSlide.setPower(1);
 
-            leftSlide.setTargetPosition(780);
-            rightSlide.setTargetPosition(780);
+            leftSlide.setTargetPosition(500);
+            rightSlide.setTargetPosition(500);
 
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             return false;
         }
@@ -112,14 +110,12 @@ public class Elevator {
     public class ScoreHigh implements Action { //raise to High Basket for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            leftSlide.setPower(1);
-            rightSlide.setPower(1);
 
             leftSlide.setTargetPosition(9500);
             rightSlide.setTargetPosition(9500);
 
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -132,14 +128,12 @@ public class Elevator {
     public class ScoreLow implements Action { //raise to Low Basket for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            leftSlide.setPower(1);
-            rightSlide.setPower(1);
 
-            leftSlide.setTargetPosition(6500);
-            rightSlide.setTargetPosition(6500);
+            leftSlide.setTargetPosition(6600);
+            rightSlide.setTargetPosition(6600);
 
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -211,16 +205,16 @@ public class Elevator {
                 elevTargetPos = 10;
                 break;
             case 1: // Load Pos
-                elevTargetPos = 780;
+                elevTargetPos = 500;
                 break;
             case 2: // safe flip
-                elevTargetPos = 1800;
+                elevTargetPos = 2000;
                 break;
             case 3: // High Bar Place 26.75"
                 elevTargetPos = 6100;
                 break;
             case 4: // Low Basket Score 29"
-                elevTargetPos = 6500;
+                elevTargetPos = 6600;
                 break;
             case 5: // High Basket Score/Max
                 elevTargetPos = 9500;

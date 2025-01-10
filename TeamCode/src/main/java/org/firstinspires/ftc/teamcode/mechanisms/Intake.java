@@ -96,7 +96,7 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             intakeLiftM.setPower(1);
-            intakeLiftM.setTargetPosition(-20);
+            intakeLiftM.setTargetPosition(-5);
             return false;
         }
     }

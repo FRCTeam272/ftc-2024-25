@@ -18,9 +18,12 @@ import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 public class SpecimenPushAuton extends LinearOpMode {
 
     // Pose to clear Submersible and turn sideways
-    public static double moveClearX = 36;
-    public static double moveClearY = -36;
+    public static double moveClearX = 12;
+    public static double moveClearY = -60;
     public static double moveClearH = Math.toRadians(90);
+
+    public static double moveClear2X = 36;
+    public static double moveClear2Y = -36;
 
     // Coord to pass Submersible
     public static double movePastX = 36;
@@ -35,27 +38,27 @@ public class SpecimenPushAuton extends LinearOpMode {
     public static double sample1pushY = -58;
 
     // Coord to clear for Sample2
-    public static double sample2clearX = 46;
+    public static double sample2clearX = 45;
     public static double sample2clearY = -12;
 
     // Coord to position for Sample2
-    public static double sample2X = 58;
+    public static double sample2X = 55;
     public static double sample2Y = -12;
 
     // Coord to push to Obs for Sample2
-    public static double sample2pushX = 58;
+    public static double sample2pushX = 55;
     public static double sample2pushY = -58;
 
     // Coord to clear for Sample3
-    public static double sample3clearX = 58;
+    public static double sample3clearX = 55;
     public static double sample3clearY = -12;
 
     // Coord to position for Sample3
-    public static double sample3X = 63;
+    public static double sample3X = 61;
     public static double sample3Y = -12;
 
     // Coord to push to Obs for Sample3
-    public static double sample3pushX = 63;
+    public static double sample3pushX = 57;
     public static double sample3pushY = -58;
 
     @Override
@@ -68,6 +71,7 @@ public class SpecimenPushAuton extends LinearOpMode {
 
         Action pushSamples = drive.actionBuilder(StartPose)
                 .strafeTo(new Vector2d(moveClearX, moveClearY)) // move away from wall
+                .strafeTo(new Vector2d(moveClear2X, moveClear2Y))
                 .strafeTo(new Vector2d(movePastX, movePastY)) // move past Sub
                 .strafeTo(new Vector2d(sample1X, sample1Y)) // move over to in back of sample 1
                 .strafeTo(new Vector2d(sample1pushX,sample1pushY)) //push sample 1 to Obs Zone
