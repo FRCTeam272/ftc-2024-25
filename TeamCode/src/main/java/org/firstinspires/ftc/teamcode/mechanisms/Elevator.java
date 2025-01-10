@@ -43,8 +43,8 @@ public class Elevator {
         leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
         rightSlide = hardwareMap.get(DcMotorEx.class, "rightSlide");
 
-        leftSlide.setDirection(DcMotor.Direction.REVERSE); //LS reversed worked on the table!
-        //rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        //leftSlide.setDirection(DcMotor.Direction.REVERSE); //LS reversed worked on the table!
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -173,6 +173,10 @@ public class Elevator {
             elevSlidePos = 1;
         } else if (gamepad2.b) { //High Bar Score/Safe load Flip
             elevSlidePos = 2;
+        } else if (gamepad2.right_bumper) { // High Specimen Pos
+            elevSlidePos = 3;
+        } else if (gamepad2.right_trigger > 0.5) { // High Specimen Score
+            elevSlidePos = 6;
         }
 //        else if (gamepad1.a) { // Low Hang Pull Pos
 //            elevSlidePos = 4;
@@ -211,13 +215,16 @@ public class Elevator {
                 elevTargetPos = 2000;
                 break;
             case 3: // High Bar Place 26.75"
-                elevTargetPos = 6100;
+                elevTargetPos = 5900;
                 break;
             case 4: // Low Basket Score 29"
                 elevTargetPos = 6600;
                 break;
             case 5: // High Basket Score/Max
                 elevTargetPos = 9500;
+                break;
+            case 6: // High Specimen Score 20.25"
+                elevTargetPos = 3700;
                 break;
 
             default:

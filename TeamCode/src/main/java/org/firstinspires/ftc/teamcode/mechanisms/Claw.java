@@ -248,11 +248,12 @@ public class Claw {
             } else if (gamepad2.left_stick_y != 0) {
                 rightFlipperS.setPower(gamepad2.left_stick_y);
                 leftFlipperS.setPower(gamepad2.left_stick_y);
+            }
 
 //            telemetry.addData("Flipper Left servo position", leftFlipperS.getPosition());
 //            telemetry.addData("Flipper Right servo position", rightFlipperS.getPosition());
                 telemetry.update();
-            }
+
         }
     }
 }

@@ -52,7 +52,7 @@ public class Intake {
 
     public Intake(HardwareMap hardwareMap){ //motor mapping
         intakeLiftM = hardwareMap.get(DcMotorEx.class, "intakeFlop");
-        intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
+       // intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        Disabled so that it doesn't reset between Auton & Teleop
 //        intakeLiftM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

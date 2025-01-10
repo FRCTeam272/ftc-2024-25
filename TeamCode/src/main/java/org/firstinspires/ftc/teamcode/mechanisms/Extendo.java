@@ -21,7 +21,7 @@ public class Extendo {
 
     public Extendo(HardwareMap hardwareMap) {
         extendoM = hardwareMap.get(DcMotorEx.class, "extendoM");
-        //extendoM.setDirection(DcMotorSimple.Direction.REVERSE);
+        extendoM.setDirection(DcMotorSimple.Direction.REVERSE);
         extendoM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extendoM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -66,7 +66,7 @@ public class Extendo {
 
         // Increase or decrease the target position depending on joystick reading. Change the multiplier to speed up or slow down
         // Remember, Joystick forward is negative!!!!!!
-        targetPosition = targetPosition + (int) (10.0 * -gamepad2.right_stick_y);
+        targetPosition = targetPosition + (int) (20.0 * -gamepad2.right_stick_y); //was 10 during last practice
 
         // Constrain the target position to the range of the mechanism.
         if (targetPosition < 0) {
