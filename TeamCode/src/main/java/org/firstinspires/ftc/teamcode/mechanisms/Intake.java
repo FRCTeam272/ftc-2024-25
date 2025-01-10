@@ -66,6 +66,7 @@ public class Intake {
 
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorColor");
 
+        intakeLiftM.setPower(1);
         intakeLiftM.setTargetPosition(0);
         intakeLiftM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -79,10 +80,6 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             intakeLiftM.setTargetPosition(800);
-            while (intakeLiftM.getCurrentPosition() <= 799) {
-                intakeLiftM.setPower(1);
-            }
-            intakeLiftM.setPower(0);
             return false;
         }
     }
@@ -108,20 +105,14 @@ public class Intake {
     public class FloorIntake implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            ElapsedTime intakeTimer = new ElapsedTime();
-            intakeTimer.reset();
 
-            while (sensorDistance.getDistance(DistanceUnit.CM) < 4 || intakeTimer.milliseconds() <= 3500 ){
-                leftIntake.setPower(1);
-                rightIntake.setPower(1);
+            if (sensorDistance.getDistance(DistanceUnit.CM) < 4 ){
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            } else {
+            leftIntake.setPower(1);
+            rightIntake.setPower(1);
             }
-            leftIntake.setPower(0);
-            rightIntake.setPower(0);
-            intakeLiftM.setTargetPosition(0);
-            while (intakeLiftM.getCurrentPosition() >= 1) {
-                intakeLiftM.setPower(-1);
-            }
-            intakeLiftM.setPower(0);
             return false;
         }
     }
@@ -130,25 +121,39 @@ public class Intake {
         return new FloorIntake();
     }
 
-    // Run Intake Inward for 5 seconds or until sample has gone through for Auton
+    // Run Intake Inward until sample has gone through for Auton, run repeatedly separated by 1/2 second waits?
     public class LoadIntake implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            ElapsedTime intakeTimer = new ElapsedTime();
-            intakeTimer.reset();
 
-            while (objcatcher.getPossession() || intakeTimer.milliseconds() <= 5000 ){
+            if (sensorDistance.getDistance(DistanceUnit.CM) > 4){
                 leftIntake.setPower(1);
                 rightIntake.setPower(1);
-            }
+            } else {
             leftIntake.setPower(0);
             rightIntake.setPower(0);
+            }
             return false;
         }
     }
 
     public Action loadIntake() {
         return new LoadIntake();
+    }
+
+    // Stops intake (if it was still running)
+    public class StopIntake implements Action { //open claw for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftIntake.setPower(0);
+            rightIntake.setPower(0);
+            return false;
+        }
+    }
+
+    public Action stopIntake() {
+        return new StopIntake();
     }
 
     public class Catcher {

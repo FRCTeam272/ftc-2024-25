@@ -102,21 +102,59 @@ public class BasketAuton extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(
 
                 claw.closeClaw(),
-                approachBasket0,
-                claw.flipStow(),
+                new ParallelAction(
+                        approachBasket0,
+                        elevator.scoreHigh(),
+                        new SequentialAction(
+                                claw.flipOut(),
+                                new SleepAction(1.2),
+                                claw.flipStop()
+                        )
+                ),
+
 
                 depositSample,
                 claw.openClaw(),
 
-                driveSample1,
+                new ParallelAction(
+                        driveSample1,
+                        elevator.load(),
+                        new SequentialAction(
+                                claw.flipIn(),
+                                new SleepAction(1.2),
+                                claw.flipStop()
+                        )
+                ),
                 intake.lower(),
 
                 new ParallelAction(
-                        extendo.extend(),
-                        intake.floorIntake()
+                        extendo.extend(), //while extendo slowly moves out
+                        new SequentialAction( //intake until sample detected or 2 seconds
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                new SleepAction(0.25),
+                                intake.floorIntake(),
+                                intake.stopIntake()
 
-
+                        )
                 ),
+                intake.raise(),
+                extendo.stow(),
+
+
 
 //                //move out of stow
 //                claw.closeClaw(),

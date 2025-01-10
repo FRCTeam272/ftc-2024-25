@@ -38,7 +38,7 @@ public class Extendo {
     public class Stow implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            extendoM.setPower(0.5);
+            extendoM.setPower(1);
             extendoM.setTargetPosition(0);
             return false;
         }

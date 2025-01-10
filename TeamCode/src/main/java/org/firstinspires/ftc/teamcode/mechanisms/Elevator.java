@@ -62,11 +62,11 @@ public class Elevator {
         leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//        leftSlide.setTargetPosition(0);
-//        rightSlide.setTargetPosition(0);
-//
-//        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setTargetPosition(0);
+        rightSlide.setTargetPosition(0);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         //armPNP = hardwareMap.get(AnalogInput.class, "armPNP");
@@ -80,7 +80,11 @@ public class Elevator {
     public class Stow implements Action { //lower to stow position for the end of Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            GoToPosition(-1, telemetry);
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(0);
+            rightSlide.setTargetPosition(0);
             return false;
         }
     }
@@ -93,7 +97,11 @@ public class Elevator {
     public class Load implements Action { //set height and open claw to load for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            GoToPosition(1, telemetry);
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(800);
+            rightSlide.setTargetPosition(800);
             return false;
         }
     }
@@ -106,7 +114,11 @@ public class Elevator {
     public class ScoreHigh implements Action { //raise to High Basket for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            GoToPosition(5, telemetry);
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(9500);
+            rightSlide.setTargetPosition(9500);
             return false;
         }
     }

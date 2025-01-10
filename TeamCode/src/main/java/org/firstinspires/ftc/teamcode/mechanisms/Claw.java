@@ -78,40 +78,15 @@ public class Claw {
         return new CloseClaw();
     }
 
-    // Flip from Stow for Auton
-    public class FlipStow implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            ElapsedTime flipTimer = new ElapsedTime();
-            flipTimer.reset();
-
-            while (flipTimer.milliseconds() <= 1300) {
-                leftFlipperS.setPower(-1); //negative power flips outward
-                rightFlipperS.setPower(-1);
-            }
-            leftFlipperS.setPower(0);
-            rightFlipperS.setPower(0);
-            return false;
-        }
-    }
-
-    public Action flipStow() {
-        return new FlipStow();
-    }
-
     // Flip Outward from inner hard stop for Auton
+    // 1200 from hard stop, 800 from stow
     public class FlipOut implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            ElapsedTime flipTimer = new ElapsedTime();
-            flipTimer.reset();
 
-            while (flipTimer.milliseconds() <= 1250) {
                 leftFlipperS.setPower(-1); //negative power flips outward
                 rightFlipperS.setPower(-1);
-            }
-            leftFlipperS.setPower(0);
-            rightFlipperS.setPower(0);
+
             return false;
         }
     }
@@ -121,24 +96,53 @@ public class Claw {
     }
 
     // Flip Inward from outer hard stop for Auton
+    // 1200 from hard stop
     public class FlipIn implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            ElapsedTime flipTimer = new ElapsedTime();
-            flipTimer.reset();
 
-            while (flipTimer.milliseconds() <= 1200) {
-                leftFlipperS.setPower(1); //positive power flips inward
-                rightFlipperS.setPower(1);
-            }
-            leftFlipperS.setPower(0);
-            rightFlipperS.setPower(0);
+            leftFlipperS.setPower(1); //positive power flips inward
+            rightFlipperS.setPower(1);
+
             return false;
         }
     }
 
     public Action flipIn() {
         return new FlipIn();
+    }
+
+    // Flip Inward very lightly to maintain height for scoring
+    // full speed for 400ms, then at least 1 sec at this speed
+    public class FlipInSlow implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftFlipperS.setPower(.08); //positive power flips inward
+            rightFlipperS.setPower(.08);
+
+            return false;
+        }
+    }
+
+    public Action flipInSlow() {
+        return new FlipInSlow();
+    }
+
+    // Stop flip motors, for auton
+    public class FlipStop implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftFlipperS.setPower(0); //0 power stops flip
+            rightFlipperS.setPower(0);
+
+            return false;
+        }
+    }
+
+    public Action flipStop() {
+        return new FlipStop();
     }
 
     // For Auton, 2.5 seconds long
