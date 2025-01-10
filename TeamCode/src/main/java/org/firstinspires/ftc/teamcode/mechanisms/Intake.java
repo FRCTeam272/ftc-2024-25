@@ -66,7 +66,7 @@ public class Intake {
 
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorColor");
 
-        intakeLiftM.setPower(1);
+        intakeLiftM.setPower(0);
         intakeLiftM.setTargetPosition(0);
         intakeLiftM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -79,6 +79,7 @@ public class Intake {
     public class Lower implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            intakeLiftM.setPower(1);
             intakeLiftM.setTargetPosition(800);
             return false;
         }
@@ -92,7 +93,8 @@ public class Intake {
     public class Raise implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intakeLiftM.setTargetPosition(0);
+            intakeLiftM.setPower(1);
+            intakeLiftM.setTargetPosition(-20);
             return false;
         }
     }
@@ -101,12 +103,13 @@ public class Intake {
         return new Raise();
     }
 
+
     // Run Intake Inward for 5 seconds Auton and then lift Intake
     public class FloorIntake implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            if (sensorDistance.getDistance(DistanceUnit.CM) < 4 ){
+            if (sensorDistance.getDistance(DistanceUnit.CM) < 3 ){
                 leftIntake.setPower(0);
                 rightIntake.setPower(0);
             } else {
@@ -121,18 +124,14 @@ public class Intake {
         return new FloorIntake();
     }
 
-    // Run Intake Inward until sample has gone through for Auton, run repeatedly separated by 1/2 second waits?
+    // Run Intake Inward
     public class LoadIntake implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            if (sensorDistance.getDistance(DistanceUnit.CM) > 4){
-                leftIntake.setPower(1);
-                rightIntake.setPower(1);
-            } else {
-            leftIntake.setPower(0);
-            rightIntake.setPower(0);
-            }
+            leftIntake.setPower(1);
+            rightIntake.setPower(1);
+
             return false;
         }
     }

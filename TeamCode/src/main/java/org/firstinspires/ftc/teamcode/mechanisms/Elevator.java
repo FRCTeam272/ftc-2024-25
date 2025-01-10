@@ -100,8 +100,8 @@ public class Elevator {
             leftSlide.setPower(1);
             rightSlide.setPower(1);
 
-            leftSlide.setTargetPosition(800);
-            rightSlide.setTargetPosition(800);
+            leftSlide.setTargetPosition(780);
+            rightSlide.setTargetPosition(780);
             return false;
         }
     }
@@ -125,6 +125,23 @@ public class Elevator {
 
     public Action scoreHigh() {
         return new ScoreHigh();
+    }
+
+    // Move Elevator to Position "Score in Low Basket"
+    public class ScoreLow implements Action { //raise to Low Basket for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(6500);
+            rightSlide.setTargetPosition(6500);
+            return false;
+        }
+    }
+
+    public Action scoreLow() {
+        return new ScoreLow();
     }
 
     public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {

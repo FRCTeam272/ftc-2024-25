@@ -28,8 +28,8 @@ public class BasketAuton extends LinearOpMode {
     public static double depositApproachY = -48;
 
     // Pose to score in basket
-    public static double depositSampleX = -54;
-    public static double depositSampleY = -54;
+    public static double depositSampleX = -58;
+    public static double depositSampleY = -58;
     public static double depositSampleH = Math.toRadians(45);
 
     // Pose to pick up Sample 1
@@ -38,7 +38,7 @@ public class BasketAuton extends LinearOpMode {
     public static double sample1H = Math.toRadians(90);
 
     // Pose to pick up Sample 2
-    public static double sample2X = -60;
+    public static double sample2X = -58;
     public static double sample2Y = -49;
     public static double sample2H = Math.toRadians(90);
 
@@ -74,12 +74,20 @@ public class BasketAuton extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(depositApproachX, depositApproachY), depositSampleH)
                 .build();
 
+        Action depositSample1 = drive.actionBuilder(new Pose2d(depositApproachX, depositApproachY, depositSampleH))
+                .strafeTo(new Vector2d(depositSampleX, depositSampleY))
+                .build();
+
         Action driveSample2 = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
                 .strafeToLinearHeading(new Vector2d(sample2X, sample2Y),sample2H)
                 .build();
 
         Action approachBasket2 = drive.actionBuilder(new Pose2d(sample2X, sample2Y, sample2H))
                 .strafeToLinearHeading(new Vector2d(depositApproachX, depositApproachY), depositSampleH)
+                .build();
+
+        Action depositSample2 = drive.actionBuilder(new Pose2d(depositApproachX, depositApproachY, depositSampleH))
+                .strafeTo(new Vector2d(depositSampleX, depositSampleY))
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
@@ -101,68 +109,139 @@ public class BasketAuton extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
 
+                // Score Preload
                 claw.closeClaw(),
                 new ParallelAction(
                         approachBasket0,
-                        elevator.scoreHigh(),
+                        elevator.scoreLow(),
                         new SequentialAction(
                                 claw.flipOut(),
-                                new SleepAction(1.2),
+                                new SleepAction(2),
                                 claw.flipStop()
                         )
                 ),
-
-
                 depositSample,
                 claw.openClaw(),
 
+                // Drive to Sample 1, while lowering elev and flipping claw in
                 new ParallelAction(
                         driveSample1,
                         elevator.load(),
                         new SequentialAction(
                                 claw.flipIn(),
-                                new SleepAction(1.2),
+                                new SleepAction(2),
                                 claw.flipStop()
                         )
                 ),
+
+                // Intake Sample 1, lower intake, intake while extending slowly
                 intake.lower(),
 
                 new ParallelAction(
-                        extendo.extend(), //while extendo slowly moves out
-                        new SequentialAction( //intake until sample detected or 2 seconds
+                        extendo.extend(),
+                        new SequentialAction(
                                 intake.floorIntake(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.35),
                                 intake.floorIntake(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.35),
                                 intake.floorIntake(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.35),
                                 intake.floorIntake(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.35),
                                 intake.floorIntake(),
-                                new SleepAction(0.25),
-                                intake.floorIntake(),
-                                new SleepAction(0.25),
-                                intake.floorIntake(),
-                                new SleepAction(0.25),
-                                intake.floorIntake(),
-                                new SleepAction(0.25),
+                                new SleepAction(0.35),
                                 intake.floorIntake(),
                                 intake.stopIntake()
 
                         )
                 ),
                 intake.raise(),
-                extendo.stow(),
+
+                // Drive Sample 1 to Basket Approach,
+                // while loading claw from intake, raise Elev, and flip out
+                new ParallelAction(
+                        approachBasket1,
+                        new SequentialAction(
+                                intake.loadIntake(),
+                                extendo.stow(),
+                                new SleepAction(3),
+                                intake.stopIntake(),
+                                claw.closeClaw(),
+                                new SleepAction(0.25),
+                                elevator.scoreLow(),
+                                new SleepAction(0.5),
+                                claw.flipOut(),
+                                new SleepAction(2),
+                                claw.flipStop()
+                        )
+                ),
+
+                //Score Sample 1
+                depositSample1,
+                claw.openClaw(),
+
+
+                // Drive to Sample 2, while lowering elev and flipping claw in
+                new ParallelAction(
+                        driveSample2,
+                        elevator.load(),
+                        new SequentialAction(
+                                claw.flipIn(),
+                                new SleepAction(2),
+                                claw.flipStop()
+                        )
+                ),
+
+        // Intake Sample 2, lower intake, intake while extending slowly
+        intake.lower(),
+
+                new ParallelAction(
+                        extendo.extend(), //while extendo slowly moves out
+                        new SequentialAction( //intake until sample detected or 2 seconds
+                                intake.floorIntake(),
+                                new SleepAction(0.35),
+                                intake.floorIntake(),
+                                new SleepAction(0.35),
+                                intake.floorIntake(),
+                                new SleepAction(0.35),
+                                intake.floorIntake(),
+                                new SleepAction(0.35),
+                                intake.floorIntake(),
+                                new SleepAction(0.35),
+                                intake.floorIntake(),
+                                intake.stopIntake()
+
+                        )
+                ),
+                intake.raise(),
+
+                // Drive Sample 2 to Basket Approach,
+                // while loading claw from intake, raise Elev, and flip out
+                new ParallelAction(
+                        approachBasket2,
+                        new SequentialAction(
+                                intake.loadIntake(),
+                                extendo.stow(),
+                                new SleepAction(3),
+                                intake.stopIntake(),
+                                claw.closeClaw(),
+                                new SleepAction(0.25),
+                                elevator.scoreLow(),
+                                new SleepAction(0.5),
+                                claw.flipOut(),
+                                new SleepAction(2),
+                                claw.flipStop()
+                        )
+                ),
+
+                //Score Sample 2
+                depositSample2,
+                claw.openClaw(),
 
 
 
-//                //move out of stow
-//                claw.closeClaw(),
-//                approachBasket0,
-//                claw.flipStow(),
 
 
-                new SleepAction(2),
 //
 //                //score Preload
 //                new ParallelAction(
@@ -186,7 +265,7 @@ public class BasketAuton extends LinearOpMode {
 //                        extendo.extend(),
 //                        intake.floorIntake()
 //                ),
-                new SleepAction(2)
+                new SleepAction(1)
 
         ));
     }

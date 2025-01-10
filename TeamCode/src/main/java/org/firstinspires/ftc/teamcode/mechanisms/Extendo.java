@@ -52,7 +52,7 @@ public class Extendo {
     public class Extend implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            extendoM.setPower(0.25);
+            extendoM.setPower(0.10);
             extendoM.setTargetPosition(300);
             return false;
         }
