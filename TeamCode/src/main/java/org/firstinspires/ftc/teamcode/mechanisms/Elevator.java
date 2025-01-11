@@ -92,8 +92,8 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(500);
-            rightSlide.setTargetPosition(500);
+            leftSlide.setTargetPosition(600);
+            rightSlide.setTargetPosition(600);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -209,7 +209,7 @@ public class Elevator {
                 elevTargetPos = 10;
                 break;
             case 1: // Load Pos
-                elevTargetPos = 500;
+                elevTargetPos = 600;
                 break;
             case 2: // safe flip
                 elevTargetPos = 2000;
