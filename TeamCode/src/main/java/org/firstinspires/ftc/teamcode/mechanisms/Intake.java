@@ -107,7 +107,7 @@ public class Intake {
 
 
     // Run Intake Inward for 5 seconds Auton and then lift Intake
-    public class FloorIntake implements Action { //open claw for Auto
+    public class FloorIntake implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 

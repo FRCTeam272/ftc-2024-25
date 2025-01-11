@@ -28,14 +28,16 @@ public class ParkAuton extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        // Initializing robot
         Pose2d StartPose = new Pose2d(12, -63.5, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, StartPose);
         Claw claw = new Claw(hardwareMap);
         Extendo extendo = new Extendo(hardwareMap);
 
+        // Build trajectory
         Action goPark = drive.actionBuilder(StartPose)
-                .strafeTo(new Vector2d(move1X, move1Y))
-                .strafeTo(new Vector2d(parkX, parkY))
+                .strafeTo(new Vector2d(move1X, move1Y)) // move off wall
+                .strafeTo(new Vector2d(parkX, parkY)) // move sideways into Obs Zone
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
