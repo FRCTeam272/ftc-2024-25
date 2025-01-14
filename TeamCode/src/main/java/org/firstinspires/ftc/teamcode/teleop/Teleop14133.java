@@ -51,7 +51,7 @@ public class Teleop14133 extends OpMode {
         extendo.Teleop(gamepad2,telemetry);
 
         intake.objcatcher.Teleop(gamepad2, telemetry);
-        intake.objlift.Teleop(gamepad2,telemetry);
+        intake.objlift.Teleop(gamepad2,gamepad1, telemetry);
 
         claw.objgrabber.Teleop(gamepad2,telemetry);
         claw.objflipper.Teleop(gamepad2,telemetry);

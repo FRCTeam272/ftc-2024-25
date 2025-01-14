@@ -207,11 +207,13 @@ public class Intake {
     }
 
     public class Lift {
-        public void Teleop(Gamepad gamepad2, Telemetry telemetry) {
+        public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {
             if (gamepad2.dpad_right) { // up position
                 intakePos = 0;
             }else if (gamepad2.dpad_left) { //down position
                 intakePos = 2;
+            }else if (gamepad1.x){
+                intakePos = 1;
             }
 
             GoToPosition (intakePos, telemetry);
@@ -228,7 +230,7 @@ public class Intake {
                     intakeTargetPos = 0;
                     break;
                 case 1: // mid position
-                    intakeTargetPos = 200;
+                    intakeTargetPos = 1100;
                     break;
                 case 2: // down position
                     intakeTargetPos = 800;

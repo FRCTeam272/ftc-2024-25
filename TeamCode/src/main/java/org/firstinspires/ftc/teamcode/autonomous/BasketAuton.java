@@ -27,28 +27,28 @@ public class BasketAuton extends LinearOpMode {
     public static double depositApproachY = -48;
 
     // Pose to score in basket
-    public static double depositSampleX = -59.5;
-    public static double depositSampleY = -59.5;
+    public static double depositSampleX = -58 ;
+    public static double depositSampleY = -58;
     public static double depositSampleH = Math.toRadians(45);
 
     // Pose to score in basket
-    public static double depositSample1X = -60;
-    public static double depositSample1Y = -60;
+    public static double depositSample1X = -58;
+    public static double depositSample1Y = -58;
     public static double depositSample1H = Math.toRadians(45);
 
     // Pose to score in basket
-    public static double depositSample2X = -60;
-    public static double depositSample2Y = -60;
+    public static double depositSample2X = -58;
+    public static double depositSample2Y = -58;
     public static double depositSample2H = Math.toRadians(45);
 
     // Pose to pick up Sample 1
-    public static double sample1X = -48;
+    public static double sample1X = -48.5;
     public static double sample1Y = -49;
     public static double sample1H = Math.toRadians(90);
 
     // Pose to pick up Sample 2
-    public static double sample2X = -58;
-    public static double sample2Y = -49;
+    public static double sample2X = -59;
+    public static double sample2Y = -48;
     public static double sample2H = Math.toRadians(90);
 
     // Pose to reset localizer for Teleop
@@ -139,8 +139,11 @@ public class BasketAuton extends LinearOpMode {
                                 claw.flipStop()
                         )
                 ),
-                depositSample,
-                claw.openClaw(),
+                new SequentialAction(
+                        depositSample,
+                        claw.openClaw()
+                ),
+
                 new SleepAction(0.5),
 
                 // Drive to Sample 1, while lowering elev and flipping claw in
