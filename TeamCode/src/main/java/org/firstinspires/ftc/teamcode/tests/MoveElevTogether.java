@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@Disabled
+
 @TeleOp
 public class MoveElevTogether extends OpMode {
     static DcMotor rightSlide;
@@ -70,11 +70,11 @@ public class MoveElevTogether extends OpMode {
             }
             rightSlide.setPower(0);
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             leftSlide.setPower(0);
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -99,8 +99,8 @@ public class MoveElevTogether extends OpMode {
 
 
         //use GP1 right stick to move right motor
-        rightSlide.setPower(-gamepad1.left_stick_y/2); //half power
-        leftSlide.setPower(-gamepad1.left_stick_y/2); //half power
+        rightSlide.setPower(-gamepad1.left_stick_y); //half power
+        leftSlide.setPower(-gamepad1.left_stick_y); //half power
     }
     public void stop(){
 

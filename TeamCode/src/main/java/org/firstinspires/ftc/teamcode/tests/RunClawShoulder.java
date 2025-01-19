@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Disabled
+
 @TeleOp
 public class RunClawShoulder extends OpMode {
 
@@ -43,7 +43,7 @@ public class RunClawShoulder extends OpMode {
         clawIsOpen = false;
 
         clawOpenPos = 0.2;
-        clawClosedPos = -0.2;
+        clawClosedPos = 0;
 
         currentGamepad1 = new Gamepad();
         previousGamepad1 = new Gamepad();
