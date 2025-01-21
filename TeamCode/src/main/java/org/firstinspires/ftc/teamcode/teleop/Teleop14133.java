@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Claw;
 import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
+import org.firstinspires.ftc.teamcode.mechanisms.Flipper;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 
 
@@ -24,6 +25,7 @@ public class Teleop14133 extends OpMode {
     private Extendo extendo=null;
     private Intake intake=null;
     private Claw claw=null;
+    private Flipper flipper=null;
 
     //@Override
     public void init() {
@@ -33,6 +35,7 @@ public class Teleop14133 extends OpMode {
         extendo = new Extendo(hardwareMap);
         intake = new Intake(hardwareMap);
         claw = new Claw(hardwareMap);
+        flipper = new Flipper(hardwareMap);
     }
 
     //@Override
@@ -46,15 +49,17 @@ public class Teleop14133 extends OpMode {
 
         telemetry.addData("Status", "Looping");
 
-        elevator.Teleop(gamepad2,gamepad1, telemetry);
+        elevator.Teleop(gamepad2, gamepad1, flipper, telemetry);
+        flipper.updateFlipperAngle(elevator, telemetry);
 
         extendo.Teleop(gamepad2,telemetry);
 
         intake.objcatcher.Teleop(gamepad2, telemetry);
         intake.objlift.Teleop(gamepad2,gamepad1, telemetry);
 
-        claw.objgrabber.Teleop(gamepad2,telemetry);
-        claw.objflipper.Teleop(gamepad2,telemetry);
+        claw.Teleop(gamepad2,telemetry);
+
+
 
         // Update Pose estimate
         drive.updatePoseEstimate();
@@ -64,8 +69,8 @@ public class Teleop14133 extends OpMode {
         //double maxDriveSpeed = 1.0;
         //double maxRotateSpeed = 0.75;
 
-        double maxDriveSpeed = 1.0 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.7);
-        double maxRotateSpeed = 0.75 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.4);
+        //double maxDriveSpeed = 1.0 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.7);
+        //double maxRotateSpeed = 0.75 - map(clamp(elevator.getCurrentHeight() / 10000.0, 0.0, 1.0), 0.0, 1.0, 0.0, 0.4);
         //drive.driveWithController(gamepad1, maxDriveSpeed, maxRotateSpeed);
 
         drive.driveFieldCentric(gamepad1);

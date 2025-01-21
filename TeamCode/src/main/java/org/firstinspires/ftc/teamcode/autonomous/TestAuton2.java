@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Claw;
+import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
 import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
@@ -28,7 +25,7 @@ public class TestAuton2 extends LinearOpMode {
 
     int elevSlidePos = -1;
 
-    private Claw claw=null;
+    private ClawOld claw=null;
     private Elevator elevator=null;
     private Extendo extendo=null;
     private Intake intake=null;
@@ -39,7 +36,7 @@ public class TestAuton2 extends LinearOpMode {
         Pose2d initialPose = new Pose2d(0,0,Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
-        claw = new Claw(hardwareMap);
+        claw = new ClawOld(hardwareMap);
         elevator = new Elevator(hardwareMap);
         extendo = new Extendo(hardwareMap);
         intake = new Intake(hardwareMap);

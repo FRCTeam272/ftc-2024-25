@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Claw;
+import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
 import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
@@ -67,7 +67,7 @@ public class BasketAuton extends LinearOpMode {
 
         Pose2d StartPose = new Pose2d(-36, -63.5, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, StartPose);
-        Claw claw = new Claw(hardwareMap);
+        ClawOld claw = new ClawOld(hardwareMap);
         Elevator elevator = new Elevator(hardwareMap);
         Extendo extendo = new Extendo(hardwareMap);
         Intake intake = new Intake(hardwareMap);

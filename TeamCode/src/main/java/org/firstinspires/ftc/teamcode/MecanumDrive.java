@@ -590,12 +590,12 @@ public final class MecanumDrive {
 
         double fastpower;
 
-        // speed is 1/2 unless hold down turbo button
+        // speed is 1/2 if holding down slow-down button
         if(gamepad1.left_bumper)  {
-            fastpower = 1;
+            fastpower = 2;
         }
         else {
-            fastpower = 2;
+            fastpower = 1;
         }
 
 

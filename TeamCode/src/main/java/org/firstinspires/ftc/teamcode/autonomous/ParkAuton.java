@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Claw;
+import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 
 @Config
@@ -31,7 +31,7 @@ public class ParkAuton extends LinearOpMode {
         // Initializing robot
         Pose2d StartPose = new Pose2d(12, -63.5, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, StartPose);
-        Claw claw = new Claw(hardwareMap);
+        ClawOld claw = new ClawOld(hardwareMap);
         Extendo extendo = new Extendo(hardwareMap);
 
         // Build trajectory

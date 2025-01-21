@@ -31,7 +31,7 @@ public class Elevator {
     int slideMax = 5;
     int slideMin = 0;
 
-    int elevSlidePos = -2;
+    int elevSlidePos = -3;
 
     double elevTargetPos = 0;
 
@@ -92,8 +92,8 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(600);
-            rightSlide.setTargetPosition(600);
+            leftSlide.setTargetPosition(300);
+            rightSlide.setTargetPosition(300);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -111,8 +111,8 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(9500);
-            rightSlide.setTargetPosition(9500);
+            leftSlide.setTargetPosition(5300);
+            rightSlide.setTargetPosition(5300);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -129,8 +129,8 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(6600);
-            rightSlide.setTargetPosition(6600);
+            leftSlide.setTargetPosition(3500);
+            rightSlide.setTargetPosition(3500);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -142,7 +142,7 @@ public class Elevator {
         return new ScoreLow();
     }
 
-    public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Telemetry telemetry) {
+    public void Teleop(Gamepad gamepad2, Gamepad gamepad1, Flipper flipper, Telemetry telemetry) {
 //        if (toggleSlide && (gamepad1.dpad_up || gamepad1.dpad_down)) {  // Only execute once per Button push
 //            toggleSlide = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
 //            if (gamepad1.dpad_up) {  // If the d-pad up button is pressed
@@ -163,23 +163,24 @@ public class Elevator {
 //        }
 
 
-        if (gamepad2.x) { // Base Pos
+        if (gamepad2.x && (flipper.getFlipperAngle() >= -5000)) { // Wall Load Position
             elevSlidePos = 0;
+        } else if (gamepad2.x && (flipper.getFlipperAngle() <= -5000)) { // Send high enough to flip out
+            elevSlidePos = -1;
+        } else if (gamepad2.y && (flipper.getFlipperAngle() <= -5000)) { // Inner Load Position
+            elevSlidePos = 1;
+        } else if (gamepad2.y && (flipper.getFlipperAngle() >= -5000)) { // Send high enough to flip in
+            elevSlidePos = -2;
         } else if (gamepad2.left_trigger > 0.5) { // Low Basket Pos
             elevSlidePos = 4;
         } else if (gamepad2.left_bumper) { // High Basket Pos
-            elevSlidePos = 5;
-        } else if (gamepad2.y) { // Load Position
-            elevSlidePos = 1;
-        } else if (gamepad2.b) { //High Bar Score/Safe load Flip
             elevSlidePos = 2;
         } else if (gamepad2.right_bumper) { // High Specimen Pos
             elevSlidePos = 3;
         } else if (gamepad2.right_trigger > 0.5) { // High Specimen Score
-            elevSlidePos = 6;
+            elevSlidePos = 5;
         }
-//        else if (gamepad1.a) { // Low Hang Pull Pos
-//            elevSlidePos = 4;
+
 //        } else if (gamepad2.right_trigger > 0.5) { // Low Specimen Pos
 //            elevSlidePos = 5;
 //        } else if (gamepad2.right_bumper) { // High Specimen Pos
@@ -199,33 +200,34 @@ public class Elevator {
         elevSlidePos = position; // to update in auto,
 
         switch (elevSlidePos) {
-            case -2: // Start Pos
+            case -3: // Start Pos
                 elevTargetPos = 0;
                 break;
-            case -1: // Zero Pos
-                elevTargetPos = 0;
+            case -2: // Safe Flip In
+                elevTargetPos = 1150;
                 break;
-            case 0: // Base Pos
+            case -1: // Safe Flip Out
+                elevTargetPos = 1150;
+                break;
+            case 0: // Load Specimen from Wall
                 elevTargetPos = 10;
                 break;
-            case 1: // Load Pos
-                elevTargetPos = 600;
+            case 1: // Inside Load Pos
+                elevTargetPos = 300;
                 break;
-            case 2: // safe flip
-                elevTargetPos = 2000;
+            case 2: // High Basket Score
+                elevTargetPos = 5300;
                 break;
-            case 3: // High Bar Place 26.75"
-                elevTargetPos = 5900;
+            case 3: // High Bar Spec Place 26.75"
+                elevTargetPos = 3100;
                 break;
             case 4: // Low Basket Score 29"
-                elevTargetPos = 6600;
+                elevTargetPos = 3500;
                 break;
-            case 5: // High Basket Score/Max
-                elevTargetPos = 9500;
+            case 5: // High Specimen Score 20.25"
+                elevTargetPos = 2050;
                 break;
-            case 6: // High Specimen Score 20.25"
-                elevTargetPos = 3700;
-                break;
+
 
             default:
                 throw new IllegalStateException("Unexpected position value: " + position); // todo: remove in comp
@@ -235,25 +237,12 @@ public class Elevator {
         telemetry.addData("elev target pos", elevTargetPos);
 
 
-        if (elevSlidePos != -2) {
+        if (elevSlidePos != -3) {
 
             elevPower = 1; // full power
-            if (slideLS.isPressed()) {
-                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                leftSlide.setTargetPosition((int) elevTargetPos);
-                rightSlide.setTargetPosition((int) elevTargetPos);
-
-            } else {
-                leftSlide.setTargetPosition((int) elevTargetPos);
-                rightSlide.setTargetPosition((int) elevTargetPos);
-            }
-
-            //Never going to happen?
-            if (leftSlide.getCurrentPosition() >= 9600 || rightSlide.getCurrentPosition() >= 9600) { //max pos
-                elevPower = 0;
-            }
+            leftSlide.setTargetPosition((int) elevTargetPos);
+            rightSlide.setTargetPosition((int) elevTargetPos);
 
             leftSlide.setPower(elevPower);
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -321,6 +310,8 @@ public class Elevator {
     public double getCurrentHeight(){
         return leftSlide.getCurrentPosition();
     }
+
+    public double getElevSlidePos() { return elevSlidePos; }
 }
 
 

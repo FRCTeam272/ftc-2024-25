@@ -15,6 +15,8 @@ public class ResetMotors extends OpMode {
 
     static DcMotorEx intakeFlop;
 
+    static DcMotorEx flipEncoder;
+
     @Override
     public void init() {
 
@@ -22,9 +24,11 @@ public class ResetMotors extends OpMode {
         leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");
         extendo = hardwareMap.get(DcMotorEx.class, "extendoM");
         intakeFlop = hardwareMap.get(DcMotorEx.class, "intakeFlop");
+        flipEncoder = hardwareMap.get(DcMotorEx.class, "rightBack");
 
         telemetry.addData("Status", "Init");
-        telemetry.addData("Use to reset motor encoders", "during driver practice");
+        telemetry.addData("Use to reset motor encoders", "before each match");
+        telemetry.addData("Claw should be ", "outward facing");
     }
 
     @Override
@@ -41,12 +45,15 @@ public class ResetMotors extends OpMode {
         intakeFlop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeFlop.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        flipEncoder.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
         telemetry.addData("Status", "Looping");
         telemetry.addData("All motor encoders", "RESET");
         telemetry.addData("rightSlide Position", rightSlide.getCurrentPosition());
         telemetry.addData("leftSlide Position", leftSlide.getCurrentPosition());
         telemetry.addData("extendo Position", extendo.getCurrentPosition());
         telemetry.addData("intakeLift Position", intakeFlop.getCurrentPosition());
+        telemetry.addData("flipEncoder position", flipEncoder.getCurrentPosition());
 
     }
 }
