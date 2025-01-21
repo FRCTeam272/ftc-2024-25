@@ -38,7 +38,7 @@ public class Flipper {
 
     double targetFlip = 0;
 
-    double innerPos = -6000; //flipper against inner stop;
+    double innerPos = -6050; //flipper against inner stop;
     double outerPos = 0; //flipper against outer stop;
     double highScorePos = -1500; //flipper up to score in High Basket
 
