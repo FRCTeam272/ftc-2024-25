@@ -58,6 +58,7 @@ public class Flipper {
     }
 
     public void GoToPosition (double angle, Telemetry telemetry) {
+        // PIDF Setup from FTC 16379 KookyBotz "PIDF Loops & Arm Control" on YouTube
         flipTargetPos = angle;
         controller.setPID(p, i, d);
         double armPos = flipEncoder.getCurrentPosition();
@@ -74,7 +75,7 @@ public class Flipper {
     }
 
     public void updateFlipperAngle(Elevator elevator, Telemetry telemetry) {
-
+        // run in loop for Teleop and Auton to have Flipper set position by where the Elevator is going
         if (elevator.getElevSlidePos() != -3) {
             // If elevator is going to high basket position and higher than safe flip height
             if ((elevator.getElevSlidePos() == 2) && (elevator.getCurrentHeight() >= safeFlipHeight)) {
