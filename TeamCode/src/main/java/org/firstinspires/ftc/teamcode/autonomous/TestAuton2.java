@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
 import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
-import org.firstinspires.ftc.teamcode.mechanisms.Intake;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeOld;
 
 @Disabled
 @Autonomous
@@ -28,7 +28,7 @@ public class TestAuton2 extends LinearOpMode {
     private ClawOld claw=null;
     private Elevator elevator=null;
     private Extendo extendo=null;
-    private Intake intake=null;
+    private IntakeOld intake=null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,7 +39,7 @@ public class TestAuton2 extends LinearOpMode {
         claw = new ClawOld(hardwareMap);
         elevator = new Elevator(hardwareMap);
         extendo = new Extendo(hardwareMap);
-        intake = new Intake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
 
         //Build Trajectories Here
 

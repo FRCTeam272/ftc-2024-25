@@ -4,14 +4,13 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Claw {
+public class ClawElev {
 
     //Instantiate motor variables
     private ServoImplEx clawS;
@@ -23,7 +22,7 @@ public class Claw {
     Gamepad currentGamepad2;
     Gamepad previousGamepad2;
 
-    public Claw(HardwareMap hardwareMap) { //motor mapping
+    public ClawElev(HardwareMap hardwareMap) { //motor mapping
         clawS = hardwareMap.get(ServoImplEx.class, "clawS");
 
         clawIsOpen = false; //toggle so that we can use one button for this

@@ -9,16 +9,14 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class Intake {
+public class IntakeOld {
 
     //Instantiate motor variables
     static DcMotorEx intakeLiftM;
@@ -50,7 +48,7 @@ public class Intake {
     boolean toggleManualIntake = true;
     int manualIntakeOn = 1;
 
-    public Intake(HardwareMap hardwareMap){ //motor mapping
+    public IntakeOld(HardwareMap hardwareMap){ //motor mapping
         intakeLiftM = hardwareMap.get(DcMotorEx.class, "intakeFlop");
        // intakeLiftM.setDirection(DcMotorSimple.Direction.REVERSE);
 

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
 import org.firstinspires.ftc.teamcode.mechanisms.Elevator;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
-import org.firstinspires.ftc.teamcode.mechanisms.Intake;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeOld;
 
 
 @Config
@@ -70,7 +70,7 @@ public class BasketAuton extends LinearOpMode {
         ClawOld claw = new ClawOld(hardwareMap);
         Elevator elevator = new Elevator(hardwareMap);
         Extendo extendo = new Extendo(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
+        IntakeOld intake = new IntakeOld(hardwareMap);
 
         Action approachBasket0 = drive.actionBuilder(StartPose)
                 .strafeToLinearHeading(new Vector2d(depositApproachX, depositApproachY), depositSampleH)

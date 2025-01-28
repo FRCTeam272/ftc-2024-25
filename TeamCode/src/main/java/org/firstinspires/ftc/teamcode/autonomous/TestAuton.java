@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -13,14 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
-import org.firstinspires.ftc.teamcode.mechanisms.Intake;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeOld;
 
 @Disabled
 @Autonomous
 public class TestAuton extends LinearOpMode {
 
     private Extendo extendo=null;
-    private Intake intake=null;
+    private IntakeOld intake=null;
 
     @Override
     public void runOpMode() {
@@ -28,7 +27,7 @@ public class TestAuton extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Extendo extendo = new Extendo(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
+        IntakeOld intake = new IntakeOld(hardwareMap);
 
         //Build trajectories here
         TrajectoryActionBuilder toBasket = drive.actionBuilder(initialPose)

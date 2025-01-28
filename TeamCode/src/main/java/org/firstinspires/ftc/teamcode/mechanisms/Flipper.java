@@ -40,7 +40,7 @@ public class Flipper {
 
     double innerPos = -6050; //flipper against inner stop;
     double outerPos = 0; //flipper against outer stop;
-    double highScorePos = -1500; //flipper up to score in High Basket
+    double highScorePos = -1000; //flipper up to score in High Basket
 
     public Flipper(HardwareMap hardwareMap) { //motor mapping
         controller  = new PIDController(p, i, d);
