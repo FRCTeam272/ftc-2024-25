@@ -54,7 +54,7 @@ public class Teleop14133 extends OpMode {
         elevator.Teleop(gamepad2, gamepad1, flipper, telemetry);
         flipper.updateFlipperAngle(elevator, telemetry);
 
-        extendo.Teleop(gamepad2,telemetry);
+        extendo.Teleop(gamepad2,floorLift, telemetry);
 
 //        intake.objcatcher.Teleop(gamepad2, telemetry);
 //        intake.objlift.Teleop(gamepad2,gamepad1, telemetry);

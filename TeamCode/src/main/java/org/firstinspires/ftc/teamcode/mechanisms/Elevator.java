@@ -53,8 +53,8 @@ public class Elevator {
 //        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //
-        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //        leftSlide.setTargetPosition(0);
 //        rightSlide.setTargetPosition(0);
@@ -213,7 +213,7 @@ public class Elevator {
                 elevTargetPos = 10;
                 break;
             case 1: // Inside Load Pos
-                elevTargetPos = 300;
+                elevTargetPos = 625;
                 break;
             case 2: // High Basket Score
                 elevTargetPos = 5300;

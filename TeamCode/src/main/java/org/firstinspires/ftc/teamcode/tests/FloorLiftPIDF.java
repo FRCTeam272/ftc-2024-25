@@ -24,8 +24,8 @@ public class FloorLiftPIDF extends OpMode {
 
     private DcMotorEx liftEncoder;
 
-    private CRServo leftLiftS;
-    private CRServo rightLiftS;
+    private CRServo aLiftS;
+    private CRServo bLiftS;
 
     @Override
     public void init() {
@@ -34,11 +34,13 @@ public class FloorLiftPIDF extends OpMode {
 
         liftEncoder = hardwareMap.get(DcMotorEx.class, "intakeFlop");
 
-        leftLiftS = hardwareMap.get(CRServo.class, "leftFlipperS");
-        rightLiftS = hardwareMap.get(CRServo.class, "rightFlipperS");
+        aLiftS = hardwareMap.get(CRServo.class, "aFlipS");
+        bLiftS = hardwareMap.get(CRServo.class, "bFlipS");
 
-        leftLiftS.setDirection(CRServo.Direction.REVERSE);
-        //rightLiftS.setDirection(CRServo.Direction.REVERSE);
+        aLiftS.setDirection(CRServo.Direction.REVERSE);
+        bLiftS.setDirection(CRServo.Direction.REVERSE);
+
+
 
         liftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -53,8 +55,8 @@ public class FloorLiftPIDF extends OpMode {
 
         double power = pid + ff;
 
-        rightLiftS.setPower(power);
-        leftLiftS.setPower(power);
+        bLiftS.setPower(power);
+        aLiftS.setPower(power);
 
         telemetry.addData("pos ", armPos);
         telemetry.addData("target ", target);

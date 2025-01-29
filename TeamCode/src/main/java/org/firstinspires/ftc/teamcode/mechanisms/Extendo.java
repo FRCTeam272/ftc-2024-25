@@ -18,6 +18,7 @@ public class Extendo {
 
     int maxPosition;
     int targetPosition;
+    int loadPosition;
 
     public Extendo(HardwareMap hardwareMap) {
         extendoM = hardwareMap.get(DcMotorEx.class, "extendoM");
@@ -27,6 +28,7 @@ public class Extendo {
 
         maxPosition = 315; // max encoder postion - get from test file
         targetPosition = 0;
+        loadPosition = 180;
 
         //set a target position before putting motor in RUN TO POSITION mode
         extendoM.setTargetPosition(0);
@@ -62,24 +64,31 @@ public class Extendo {
         return new Extend();
     }
 
-    public void Teleop(Gamepad gamepad2, Telemetry telemetry) {
+    public void Teleop(Gamepad gamepad2, FloorLift floorLift, Telemetry telemetry) {
 
-        // Increase or decrease the target position depending on joystick reading. Change the multiplier to speed up or slow down
-        // Remember, Joystick forward is negative!!!!!!
-        targetPosition = targetPosition + (int) (20.0 * -gamepad2.right_stick_y); //was 10 during last practice
-
-        // Constrain the target position to the range of the mechanism.
-        if (targetPosition < 0) {
-            targetPosition = 0;
-        } else if (targetPosition > maxPosition) {
-            targetPosition = maxPosition;
+        if (floorLift.getLiftPos() <= 0){
+            extendoM.setTargetPosition(loadPosition);
         }
 
-        // Set motor target to the new value of the targetPosition variable
-        extendoM.setTargetPosition(targetPosition);
+        else if (floorLift.getLiftPos() ==1) {
 
-        // Set motor power to .5 to seek (and hold) the new target position
-        extendoM.setPower(0.5);
+            // Increase or decrease the target position depending on joystick reading. Change the multiplier to speed up or slow down
+            // Remember, Joystick forward is negative!!!!!!
+            targetPosition = targetPosition + (int) (17.0 * -gamepad2.right_stick_y); //was 10 during last practice
+
+            // Constrain the target position to the range of the mechanism.
+            if (targetPosition < 0) {
+                targetPosition = 0;
+            } else if (targetPosition > maxPosition) {
+                targetPosition = maxPosition;
+            }
+
+            // Set motor target to the new value of the targetPosition variable
+            extendoM.setTargetPosition(targetPosition);
+        }
+            // Set motor power to .5 to seek (and hold) the new target position
+            extendoM.setPower(0.5);
+
     }
 }
 

@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@Disabled
 @TeleOp
 public class MoveExtendo extends OpMode {
 
@@ -29,6 +28,8 @@ public class MoveExtendo extends OpMode {
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
+
+        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         maxPosition = 315;
         targetPosition = 0;

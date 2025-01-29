@@ -26,7 +26,7 @@ public class ClawFloor {
 
         clawIsOpen = false; //toggle so that we can use one button for this
 
-        clawOpenPos = 0.3;
+        clawOpenPos = 0.15;
         clawClosedPos = 0;
 
         currentGamepad2 = new Gamepad();
@@ -48,10 +48,10 @@ public class ClawFloor {
         currentGamepad2.copy(gamepad2);
 
         //Rising edge detector toggle switch for claw
-        if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && clawIsOpen) {
+        if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && clawIsOpen) {
             clawFloorS.setPosition(clawClosedPos);
             clawIsOpen = false;
-        } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && !clawIsOpen) {
+        } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && !clawIsOpen) {
             clawFloorS.setPosition(clawOpenPos);
             clawIsOpen = true;
         }

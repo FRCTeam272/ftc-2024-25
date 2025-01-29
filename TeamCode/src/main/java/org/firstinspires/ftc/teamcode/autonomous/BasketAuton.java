@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 import org.firstinspires.ftc.teamcode.mechanisms.IntakeOld;
 
 
-@Config
+
 @Autonomous (name="Basket_Side_Auton", group="Auto")
 public class BasketAuton extends LinearOpMode {
 
