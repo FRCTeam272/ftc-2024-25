@@ -27,7 +27,7 @@ public class ClawFloor {
         clawIsOpen = false; //toggle so that we can use one button for this
 
         clawOpenPos = 0.15;
-        clawClosedPos = 0;
+        clawClosedPos = 0.015;
 
         currentGamepad2 = new Gamepad();
         previousGamepad2 = new Gamepad();

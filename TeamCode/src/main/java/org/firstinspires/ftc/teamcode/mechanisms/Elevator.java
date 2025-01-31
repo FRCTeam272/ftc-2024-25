@@ -34,6 +34,10 @@ public class Elevator {
     int elevSlidePos = -3;
 
     double elevTargetPos = 0;
+    int rightError = 0;
+
+    int currentSlidePos = 0;
+    int previousSlidePos = 0;
 
     double elevPower = 0;
 
@@ -53,14 +57,14 @@ public class Elevator {
 //        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //
-        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//        leftSlide.setTargetPosition(0);
-//        rightSlide.setTargetPosition(0);
-//
-//        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setTargetPosition(0);
+        rightSlide.setTargetPosition(0);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         slideLS = hardwareMap.get(TouchSensor.class, "slideLS");
@@ -77,8 +81,8 @@ public class Elevator {
             leftSlide.setTargetPosition(0);
             rightSlide.setTargetPosition(0);
 
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -204,16 +208,16 @@ public class Elevator {
                 elevTargetPos = 0;
                 break;
             case -2: // Safe Flip In
-                elevTargetPos = 1150;
+                elevTargetPos = 1300;
                 break;
             case -1: // Safe Flip Out
-                elevTargetPos = 1150;
+                elevTargetPos = 1300;
                 break;
             case 0: // Load Specimen from Wall
                 elevTargetPos = 10;
                 break;
             case 1: // Inside Load Pos
-                elevTargetPos = 625;
+                elevTargetPos = 610;
                 break;
             case 2: // High Basket Score
                 elevTargetPos = 5300;
@@ -236,18 +240,29 @@ public class Elevator {
         telemetry.addData("elev slide pos case", elevSlidePos);
         telemetry.addData("elev target pos", elevTargetPos);
 
+        //
+        previousSlidePos = currentSlidePos;
+        currentSlidePos = rightSlide.getCurrentPosition();
+        if ((currentSlidePos > 2000) && (previousSlidePos <= 2000)){
+            rightError = rightError + 20;
+        }
 
         if (elevSlidePos != -3) {
 
+            if (elevSlidePos == 1) {
+                leftSlide.setTargetPosition((int) elevTargetPos);
+                rightSlide.setTargetPosition((int) elevTargetPos - rightError);
+            }
+            else {
+                leftSlide.setTargetPosition((int) elevTargetPos);
+                rightSlide.setTargetPosition((int) elevTargetPos);
+            }
+
             elevPower = 1; // full power
 
-            leftSlide.setTargetPosition((int) elevTargetPos);
-            rightSlide.setTargetPosition((int) elevTargetPos);
-
             leftSlide.setPower(elevPower);
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setPower(elevPower);
-            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         }
     }
 

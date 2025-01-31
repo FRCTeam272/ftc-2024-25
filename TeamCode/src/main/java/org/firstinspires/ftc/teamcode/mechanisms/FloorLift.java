@@ -34,7 +34,7 @@ public class FloorLift {
 
     double loadPos = -1980; // load position
     double upPos = 0; //lift straight up all the way;
-    double downPos = 2100; //lift on floor;
+    double downPos = 2250; //lift on floor;
 
     public FloorLift (HardwareMap hardwareMap) { //motor mapping
         controller  = new PIDController(p, i, d);
@@ -87,18 +87,30 @@ public class FloorLift {
 
 
         // PIDF Setup from FTC 16379 KookyBotz "PIDF Loops & Arm Control" on YouTube
-        if (liftPos != -2) {
-            controller.setPID(p, i, d);
-            double armPos = liftEncoder.getCurrentPosition();
-            double pid = controller.calculate(armPos, liftTargetPos);
-            double ff = Math.cos(Math.toRadians(liftTargetPos / ticks_in_degrees)) * f;
+        if (liftPos != 2) { //if not in start position
 
-            double power = pid + ff;
+            // if the lift is on the floor, cut power to the servos
+            if ((liftPos == 1) && ( liftEncoder.getCurrentPosition() >= (liftTargetPos - 100))){
+                bLiftS.setPower(0);
+                aLiftS.setPower(0);
+            }
+            // if lift is in load position, cut power to the servos
+            else if ((liftPos == -1) && (liftEncoder.getCurrentPosition() <= (liftTargetPos + 100))){
+                bLiftS.setPower(0);
+                aLiftS.setPower(0);
+            }
+            else{
+                controller.setPID(p, i, d);
+                double armPos = liftEncoder.getCurrentPosition();
+                double pid = controller.calculate(armPos, liftTargetPos);
+                double ff = Math.cos(Math.toRadians(liftTargetPos / ticks_in_degrees)) * f;
 
-            bLiftS.setPower(power);
-            aLiftS.setPower(power);
+                double power = pid + ff;
 
-            telemetry.addData("flipper pos ", armPos);
+                bLiftS.setPower(power);
+                aLiftS.setPower(power);
+            }
+            telemetry.addData("flipper pos ", liftEncoder.getCurrentPosition());
             telemetry.addData("flipper target ", liftTargetPos);
         }
     }

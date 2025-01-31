@@ -57,26 +57,42 @@ public class Flipper {
 
     }
 
-    public void GoToPosition (double angle, Telemetry telemetry) {
-        // PIDF Setup from FTC 16379 KookyBotz "PIDF Loops & Arm Control" on YouTube
-        flipTargetPos = angle;
-        controller.setPID(p, i, d);
-        double armPos = flipEncoder.getCurrentPosition();
-        double pid = controller.calculate(armPos, flipTargetPos);
-        double ff = Math.cos(Math.toRadians(flipTargetPos / ticks_in_degrees)) * f;
+    public void GoToPosition (double angle, Elevator elevator, Telemetry telemetry) {
 
-        double power = pid + ff;
+        // turn off servos if at inner hard stop
+        if ((elevator.getElevSlidePos() == 1) && (getFlipperAngle() < (innerPos + 50))) {
+            rightFlipperS.setPower(0);
+            leftFlipperS.setPower(0);
+        }
+        // turn off servos if at outer hard stop
+        else if (((elevator.getElevSlidePos() == 0) || (elevator.getElevSlidePos() == 4) || (elevator.getElevSlidePos() == -1)) && (getFlipperAngle() > (outerPos - 50))) {
+            rightFlipperS.setPower(0);
+            leftFlipperS.setPower(0);
+        }
+        else { //run servos
+            // PIDF Setup from FTC 16379 KookyBotz "PIDF Loops & Arm Control" on YouTube
+            flipTargetPos = angle;
+            controller.setPID(p, i, d);
+            double armPos = flipEncoder.getCurrentPosition();
+            double pid = controller.calculate(armPos, flipTargetPos);
+            double ff = Math.cos(Math.toRadians(flipTargetPos / ticks_in_degrees)) * f;
 
-        rightFlipperS.setPower(power);
-        leftFlipperS.setPower(power);
+            double power = pid + ff;
 
-        telemetry.addData("flipper pos ", armPos);
+            rightFlipperS.setPower(power);
+            leftFlipperS.setPower(power);
+        }
+
+
+
+        telemetry.addData("flipper pos ", flipEncoder.getCurrentPosition());
         telemetry.addData("flipper target ", flipTargetPos);
     }
 
     public void updateFlipperAngle(Elevator elevator, Telemetry telemetry) {
         // run in loop for Teleop and Auton to have Flipper set position by where the Elevator is going
         if (elevator.getElevSlidePos() != -3) {
+
             // If elevator is going to high basket position and higher than safe flip height
             if ((elevator.getElevSlidePos() == 2) && (elevator.getCurrentHeight() >= safeFlipHeight)) {
                 targetFlip = highScorePos;
@@ -98,14 +114,42 @@ public class Flipper {
                 targetFlip = innerPos;
             }
 
-            GoToPosition(targetFlip, telemetry);
+            GoToPosition(targetFlip, elevator, telemetry);
         }
     }
 
     public double getFlipperAngle() { return flipEncoder.getCurrentPosition(); }
 
+    // Stop flip motors, for auton
+    public class FlipStop implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
 
+            leftFlipperS.setPower(0); //0 power stops flip
+            rightFlipperS.setPower(0);
 
+            return false;
+        }
+    }
+    public Action flipStop() {
+        return new FlipStop();
+    }
+
+    // Flip Outward from inner hard stop for Auton
+    // 1200 from hard stop, 800 from stow
+    public class FlipOut implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftFlipperS.setPower(-1); //negative power flips outward
+            rightFlipperS.setPower(-1);
+
+            return false;
+        }
+    }
+    public Action flipOut() {
+        return new FlipOut();
+    }
 
 
 }

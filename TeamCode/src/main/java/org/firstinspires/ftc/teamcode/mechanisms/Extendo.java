@@ -28,7 +28,7 @@ public class Extendo {
 
         maxPosition = 315; // max encoder postion - get from test file
         targetPosition = 0;
-        loadPosition = 180;
+        loadPosition = 185;
 
         //set a target position before putting motor in RUN TO POSITION mode
         extendoM.setTargetPosition(0);
@@ -66,11 +66,15 @@ public class Extendo {
 
     public void Teleop(Gamepad gamepad2, FloorLift floorLift, Telemetry telemetry) {
 
-        if (floorLift.getLiftPos() <= 0){
+        if (floorLift.getLiftPos() == 2) { //don't extend at start
+            extendoM.setTargetPosition(0);
+        }
+
+        else if (floorLift.getLiftPos() <= 0){ // if loading or upright, go to safe flip position
             extendoM.setTargetPosition(loadPosition);
         }
 
-        else if (floorLift.getLiftPos() ==1) {
+        else if (floorLift.getLiftPos() ==1) { // if down on floor, put extendo to driver control
 
             // Increase or decrease the target position depending on joystick reading. Change the multiplier to speed up or slow down
             // Remember, Joystick forward is negative!!!!!!
