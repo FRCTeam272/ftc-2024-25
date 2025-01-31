@@ -62,11 +62,16 @@ public class ClawElev {
         telemetry.update();
     }
 
+    public boolean IsClawOpen() {
+        return clawIsOpen;
+    }
+
     // Open Claw for Auton
     public class OpenClaw implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             clawS.setPosition(clawOpenPos);
+            clawIsOpen = true;
             return false;
         }
     }
@@ -80,6 +85,7 @@ public class ClawElev {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             clawS.setPosition(clawClosedPos);
+            clawIsOpen = false;
             return false;
         }
     }

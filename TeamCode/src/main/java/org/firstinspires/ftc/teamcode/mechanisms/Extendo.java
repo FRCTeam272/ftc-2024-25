@@ -64,6 +64,10 @@ public class Extendo {
         return new Extend();
     }
 
+    public void setTargetPosition (int position){
+        extendoM.setTargetPosition(position);
+    }
+
     public void Teleop(Gamepad gamepad2, FloorLift floorLift, Telemetry telemetry) {
 
         if (floorLift.getLiftPos() == 2) { //don't extend at start
