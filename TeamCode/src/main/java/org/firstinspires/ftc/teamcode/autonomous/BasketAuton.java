@@ -165,7 +165,13 @@ public class BasketAuton extends LinearOpMode {
                 case DRIVEBASKET_0:
                     if (clawElev.IsClawOpen()) {
                         currentState = State.DRIVESAMPLE_1;
+                        Actions.runBlocking(new SequentialAction(
+                                driveSample1
+                        ));
+                        floorLift.GoToPosition(1,telemetry);
+                        elevator.GoToPosition(-2, telemetry);
                     }
+                    break;
             }
 
             flipper.updateFlipperAngle(elevator, telemetry);
