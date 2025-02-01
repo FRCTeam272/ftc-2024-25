@@ -50,18 +50,18 @@ public class Extendo {
         return new Stow();
     }
 
-    // Slowly push out Extendo for Auton
-    public class Extend implements Action { //open claw for Auto
+    // Push out Extendo to Load Position for Auton
+    public class Load implements Action { //open claw for Auto
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            extendoM.setPower(0.10);
-            extendoM.setTargetPosition(300);
+            extendoM.setPower(1);
+            extendoM.setTargetPosition(185);
             return false;
         }
     }
 
-    public Action extend() {
-        return new Extend();
+    public Action load() {
+        return new Load();
     }
 
     public void setTargetPosition (int position){

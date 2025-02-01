@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.ClawOld;
+import org.firstinspires.ftc.teamcode.mechanisms.ClawElev;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 
 @Config
@@ -66,7 +66,7 @@ public class SpecimenPushAuton extends LinearOpMode {
 
         Pose2d StartPose = new Pose2d(12, -63.5, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, StartPose);
-        ClawOld claw = new ClawOld(hardwareMap);
+        ClawElev clawElev = new ClawElev(hardwareMap);
         Extendo extendo = new Extendo(hardwareMap);
 
         Action pushSamples = drive.actionBuilder(StartPose)
@@ -96,7 +96,7 @@ public class SpecimenPushAuton extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(new SequentialAction(
-                claw.closeClaw(),
+                clawElev.closeClaw(),
                 extendo.stow(),
                 pushSamples
         ));

@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -18,15 +17,32 @@ import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 import org.firstinspires.ftc.teamcode.mechanisms.Flipper;
 import org.firstinspires.ftc.teamcode.mechanisms.FloorLift;
 
-@Autonomous(name="Basket_Side_Auton", group="Auto")
-public class BasketAuton extends LinearOpMode {
+@Disabled
+@Autonomous (name="Basket_Side_Auton", group="Auto")
+public class BasketAutonExperiment extends LinearOpMode {
+
+    // This enum defines our "state"
+    // This is essentially just defines the steps our program will take
+    enum State {
+        DRIVEBASKET_0,  // First, drive to basket for preload
+        SCORE_0,        // Then, score the first sample
+        DRIVESAMPLE_1,  // Then drive to sample 1
+        TRAJECTORY_3,   // Then, we follow another lineTo() trajectory
+        WAIT_1,         // Then we're gonna wait a second
+        TURN_2,         // Finally, we're gonna turn again
+        IDLE            // Our bot will enter the IDLE state when done
+    }
+
+    // We define the current state we're on
+    // Default to IDLE
+    State currentState = State.IDLE;
 
     // Pose to approach basket head on
     public static double depositApproachX = -48;
     public static double depositApproachY = -48;
 
     // Pose to score in basket
-    public static double depositSampleX = -58;
+    public static double depositSampleX = -58 ;
     public static double depositSampleY = -58;
     public static double depositSampleH = Math.toRadians(45);
 
@@ -83,8 +99,8 @@ public class BasketAuton extends LinearOpMode {
                 .strafeTo(new Vector2d(depositSampleX, depositSampleY))
                 .build();
 
-        Action driveSample1 = drive.actionBuilder(new Pose2d(depositSampleX, depositSampleY, depositSampleH))
-                .strafeToLinearHeading(new Vector2d(sample1X, sample1Y), sample1H)
+        Action driveSample1 = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
+                .strafeToLinearHeading(new Vector2d(sample1X, sample1Y),sample1H)
                 .build();
 
         Action approachBasket1 = drive.actionBuilder(new Pose2d(sample1X, sample1Y, sample1H))
@@ -95,8 +111,8 @@ public class BasketAuton extends LinearOpMode {
                 .strafeTo(new Vector2d(depositSample1X, depositSample1Y))
                 .build();
 
-        Action driveSample2 = drive.actionBuilder(new Pose2d(depositSample1X, depositSample1Y, depositSampleH))
-                .strafeToLinearHeading(new Vector2d(sample2X, sample2Y), sample2H)
+        Action driveSample2 = drive.actionBuilder(new Pose2d(depositSample1X,depositSample1Y,depositSampleH))
+                .strafeToLinearHeading(new Vector2d(sample2X, sample2Y),sample2H)
                 .build();
 
         Action approachBasket2 = drive.actionBuilder(new Pose2d(sample2X, sample2Y, sample2H))
@@ -107,11 +123,11 @@ public class BasketAuton extends LinearOpMode {
                 .strafeTo(new Vector2d(depositSample2X, depositSample2Y))
                 .build();
 
-        Action resetPose = drive.actionBuilder(new Pose2d(depositSample2X, depositSample2Y, depositSampleH))
-                .strafeToLinearHeading(new Vector2d(resetX, resetY), resetH)
+        Action resetPose = drive.actionBuilder(new Pose2d(depositSample2X, depositSample2Y,depositSampleH))
+                .strafeToLinearHeading(new Vector2d(resetX,resetY),resetH)
                 .build();
 
-        Action park = drive.actionBuilder(new Pose2d(depositSampleX, depositSampleY, depositSampleH))
+        Action park = drive.actionBuilder(new Pose2d(depositSampleX,depositSampleY,depositSampleH))
                 .strafeToLinearHeading(new Vector2d(parkX, parkY), parkH)
                 .strafeTo(new Vector2d(parkX + parkXCreep, parkY))
                 .build();
@@ -128,78 +144,40 @@ public class BasketAuton extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+        // set the current state to the first one and run movements & trajectories
+        currentState = State.DRIVEBASKET_0;
+
+        extendo.setTargetPosition(0);
+        elevator.GoToPosition(2, telemetry);
         Actions.runBlocking(new SequentialAction(
-
-                // Drive to Basket to score Preload
                 clawElev.closeClaw(),
-                extendo.stow(),
-                new ParallelAction(
-                        approachBasket0,
-                        elevator.scoreHigh()
-                ),
-
-                // Approach basket and flip out to rest on basket
-                new ParallelAction(
-                        depositSample0,
-                        new SequentialAction(
-                                flipper.flipOut(),
-                                new SleepAction(.5),
-                                flipper.flipStop()
-                        )
-                ),
-
-                // Open claw and flip back inward
-                new SequentialAction(
-                        clawElev.openClaw(),
-                        new SleepAction(.25),
-                        new ParallelAction(
-                                flipper.flipIn(),
-                                new SleepAction(.5),
-                                flipper.flipStop()
-                        ),
-
-                        // Drive to Sample 1, while lowering Elev
-                        new ParallelAction(
-                                driveSample1,
-                                extendo.load(),
-                                elevator.safeFlip(),
-                                new SequentialAction(
-                                        floorLift.flipOut(),
-                                        new SleepAction(.5),
-                                        floorLift.flipStop()
-                                )
-                        )
-                ),
-
-                // Close intake claw and flip intake back in, load elevator claw
-                new SequentialAction(
-                        clawFloor.closeClaw(),
-                        new SleepAction(.25),
-                        floorLift.flipIn(),
-                        new SleepAction(.5),
-                        floorLift.flipStop(),
-                        new SleepAction(.25),
-                        clawFloor.openClaw(),
-                        elevator.load(),
-                        new SleepAction(.25),
-                        clawElev.closeClaw()
-                )
-//
-//                // Drive Sample 1 to basket approach while raising elevator
-//                new ParallelAction(
-//                        approachBasket1,
-//                        elevator.scoreHigh()
-//                ),
-//                // Approach basket and flip out to rest on basket
-//                new ParallelAction(
-//                        depositSample1,
-//                        new SequentialAction(
-//                                flipper.flipOut(),
-//                                new SleepAction(.5),
-//                                flipper.flipStop()
-//                        )
-//                )
+                approachBasket0,
+                depositSample0,
+                clawElev.openClaw()
 
         ));
+
+        while (opModeIsActive() && !isStopRequested()) {
+            // Our state machine logic
+            // You can have multiple switch statements running together for multiple state machines
+            // in parallel. This is the basic idea for subsystems and commands.
+
+            // We essentially define the flow of the state machine through this switch statement
+            switch (currentState) {
+                case DRIVEBASKET_0:
+                    if (clawElev.IsClawOpen()) {
+                        currentState = State.DRIVESAMPLE_1;
+                        Actions.runBlocking(new SequentialAction(
+                                driveSample1
+                        ));
+                        floorLift.GoToPosition(1,telemetry);
+                        elevator.GoToPosition(-2, telemetry);
+                    }
+                    break;
+            }
+
+            flipper.updateFlipperAngle(elevator, telemetry);
+
+        }
     }
 }

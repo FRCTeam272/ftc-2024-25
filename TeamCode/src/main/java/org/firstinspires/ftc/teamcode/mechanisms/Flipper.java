@@ -136,7 +136,6 @@ public class Flipper {
     }
 
     // Flip Outward from inner hard stop for Auton
-    // 1200 from hard stop, 800 from stow
     public class FlipOut implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -149,6 +148,21 @@ public class Flipper {
     }
     public Action flipOut() {
         return new FlipOut();
+    }
+
+    // Flip Inward from outer hard stop for Auton
+    public class FlipIn implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftFlipperS.setPower(1); //positive power flips inward
+            rightFlipperS.setPower(1);
+
+            return false;
+        }
+    }
+    public Action flipIn() {
+        return new FlipIn();
     }
 
 

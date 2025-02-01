@@ -96,8 +96,8 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(300);
-            rightSlide.setTargetPosition(300);
+            leftSlide.setTargetPosition(610);
+            rightSlide.setTargetPosition(610);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -108,6 +108,25 @@ public class Elevator {
 
     public Action load() {
         return new Load();
+    }
+
+    // Move Elevator to Position "Safe Flip"
+    public class SafeFlip implements Action { //set height and open claw to load for Auto
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            leftSlide.setTargetPosition(1300);
+            rightSlide.setTargetPosition(1300);
+
+//            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            return false;
+        }
+    }
+
+    public Action safeFlip() {
+        return new SafeFlip();
     }
 
     // Move Elevator to Position "Score in High Basket"

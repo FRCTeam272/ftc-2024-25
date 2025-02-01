@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -117,4 +121,49 @@ public class FloorLift {
     public double getLiftAngle() { return liftEncoder.getCurrentPosition(); }
 
     public int getLiftPos() { return liftPos; }
+
+    // Stop flip motors, for auton
+    public class FlipStop implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            aLiftS.setPower(0); //0 power stops flip
+            bLiftS.setPower(0);
+
+            return false;
+        }
+    }
+    public Action flipStop() {
+        return new FlipStop();
+    }
+
+    // Flip Outward from inner hard stop for Auton
+    public class FlipOut implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            aLiftS.setPower(-1); //negative power flips outward
+            bLiftS.setPower(-1);
+
+            return false;
+        }
+    }
+    public Action flipOut() {
+        return new FlipOut();
+    }
+
+    // Flip Inward from outer hard stop for Auton
+    public class FlipIn implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            aLiftS.setPower(1); //positive power flips inward
+            bLiftS.setPower(1);
+
+            return false;
+        }
+    }
+    public Action flipIn() {
+        return new FlipIn();
+    }
 }
