@@ -30,6 +30,8 @@ public class ClawElev {
         clawOpenPos = 0.2;
         clawClosedPos = 0;
 
+        clawS.setPosition(clawClosedPos);
+
         currentGamepad2 = new Gamepad();
         previousGamepad2 = new Gamepad();
     }

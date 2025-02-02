@@ -162,7 +162,7 @@ public class BasketAutonOld extends LinearOpMode {
                 intake.lower(),
 
                 new ParallelAction(
-                        extendo.extend(),
+                        extendo.load(),
                         new SequentialAction(
                                 intake.floorIntake(),
                                 new SleepAction(0.35),
@@ -223,7 +223,7 @@ public class BasketAutonOld extends LinearOpMode {
         intake.lower(),
 
                 new ParallelAction(
-                        extendo.extend(), //while extendo slowly moves out
+                        extendo.load(), //while extendo slowly moves out
                         new SequentialAction( //intake until sample detected or 2 seconds
                                 intake.floorIntake(),
                                 new SleepAction(0.35),

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -19,13 +20,11 @@ import org.firstinspires.ftc.teamcode.mechanisms.FloorLift;
 @Autonomous(name="Left_Side_Hang_Only_Auton", group="Auto")
 public class HangAuton extends LinearOpMode {
 
-    // Coordinates to move to clear Sub fins
-    public static double move1X = -36;
-    public static double move1Y = -12;
-
     // Hang coordinates
-    public static double hangX = -28;
-    public static double hangY = -12;
+    public static double hangX = -36;
+    public static double hangY = -11;
+    public static double hangXCreep = 10;
+    public static double hangH = Math.toRadians(180);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,8 +40,8 @@ public class HangAuton extends LinearOpMode {
 
         // Build trajectory
         Action goHang = drive.actionBuilder(StartPose)
-                .strafeTo(new Vector2d(move1X, move1Y)) // move to clear Sub fins
-                .strafeTo(new Vector2d(hangX, hangY)) // move to Sub for Hang
+                .strafeToLinearHeading(new Vector2d(hangX, hangY), hangH)
+                .strafeTo(new Vector2d(hangX + hangXCreep, hangY))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -59,14 +58,18 @@ public class HangAuton extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
                 clawElev.closeClaw(),
-                extendo.stow(),
-                goHang,
-                elevator.scoreLow(),
-                new SequentialAction(
-                        flipper.flipOut(),
-                        new SleepAction(2),
-                        flipper.flipStop()
-                )
+                extendo.load(),
+                new ParallelAction(
+                        goHang,
+                        elevator.safeFlip(),
+                        new SequentialAction(
+                                new SleepAction(4),
+                                flipper.flipOut(),
+                                new SleepAction(1.25),
+                                flipper.flipStop()
+                        )
+                ),
+                new SleepAction(3)
 
         ));
     }

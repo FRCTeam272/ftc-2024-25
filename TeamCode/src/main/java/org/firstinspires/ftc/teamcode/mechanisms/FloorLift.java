@@ -142,8 +142,8 @@ public class FloorLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            aLiftS.setPower(-1); //negative power flips outward
-            bLiftS.setPower(-1);
+            aLiftS.setPower(1); //positive power flips outward
+            bLiftS.setPower(1);
 
             return false;
         }
@@ -157,8 +157,8 @@ public class FloorLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            aLiftS.setPower(1); //positive power flips inward
-            bLiftS.setPower(1);
+            aLiftS.setPower(-1); //negative power flips inward
+            bLiftS.setPower(-1);
 
             return false;
         }

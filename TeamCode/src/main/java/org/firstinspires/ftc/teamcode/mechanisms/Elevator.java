@@ -96,8 +96,11 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(610);
-            rightSlide.setTargetPosition(610);
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(630);
+            rightSlide.setTargetPosition(630);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -115,8 +118,11 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftSlide.setTargetPosition(1300);
-            rightSlide.setTargetPosition(1300);
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
+            leftSlide.setTargetPosition(1700);
+            rightSlide.setTargetPosition(1700);
 
 //            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -124,7 +130,6 @@ public class Elevator {
             return false;
         }
     }
-
     public Action safeFlip() {
         return new SafeFlip();
     }
@@ -134,6 +139,9 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
             leftSlide.setTargetPosition(5300);
             rightSlide.setTargetPosition(5300);
 
@@ -142,7 +150,6 @@ public class Elevator {
             return false;
         }
     }
-
     public Action scoreHigh() {
         return new ScoreHigh();
     }
@@ -152,6 +159,9 @@ public class Elevator {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
+            leftSlide.setPower(1);
+            rightSlide.setPower(1);
+
             leftSlide.setTargetPosition(3500);
             rightSlide.setTargetPosition(3500);
 
@@ -160,7 +170,6 @@ public class Elevator {
             return false;
         }
     }
-
     public Action scoreLow() {
         return new ScoreLow();
     }
@@ -184,7 +193,11 @@ public class Elevator {
 //        else if (!gamepad1.dpad_up && !gamepad1.dpad_down) { //if neither button is being pressed
 //            toggleSlide = true; // Button has been released, so this allows a re-press to activate the code above.
 //        }
-
+        previousSlidePos = currentSlidePos;
+        currentSlidePos = rightSlide.getCurrentPosition();
+        if ((currentSlidePos > 2000) && (previousSlidePos <= 2000)){
+            rightError = rightError + 10;
+        }
 
         if (gamepad2.x && (flipper.getFlipperAngle() >= -5000)) { // Wall Load Position
             elevSlidePos = 0;
@@ -202,6 +215,8 @@ public class Elevator {
             elevSlidePos = 3;
         } else if (gamepad2.right_trigger > 0.5) { // High Specimen Score
             elevSlidePos = 5;
+        } else if (gamepad2.b) {
+            rightError = rightError + 15;
         }
 
 //        } else if (gamepad2.right_trigger > 0.5) { // Low Specimen Pos
@@ -214,11 +229,12 @@ public class Elevator {
 //            elevSlidePos = 8;
 //        }
 
+        telemetry.addData("error correction", rightError);
 
-        GoToPosition(elevSlidePos, telemetry);
+        GoToPosition(elevSlidePos, rightError, telemetry);
     }
 
-    public void GoToPosition(int position, Telemetry telemetry) {
+    public void GoToPosition(int position, int error, Telemetry telemetry) {
 
         elevSlidePos = position; // to update in auto,
 
@@ -227,16 +243,16 @@ public class Elevator {
                 elevTargetPos = 0;
                 break;
             case -2: // Safe Flip In
-                elevTargetPos = 1300;
+                elevTargetPos = 1700;
                 break;
             case -1: // Safe Flip Out
-                elevTargetPos = 1300;
+                elevTargetPos = 1700;
                 break;
             case 0: // Load Specimen from Wall
                 elevTargetPos = 10;
                 break;
             case 1: // Inside Load Pos
-                elevTargetPos = 610;
+                elevTargetPos = 630;
                 break;
             case 2: // High Basket Score
                 elevTargetPos = 5300;
@@ -260,21 +276,21 @@ public class Elevator {
         telemetry.addData("elev target pos", elevTargetPos);
 
         //
-        previousSlidePos = currentSlidePos;
-        currentSlidePos = rightSlide.getCurrentPosition();
-        if ((currentSlidePos > 2000) && (previousSlidePos <= 2000)){
-            rightError = rightError + 20;
-        }
+//        previousSlidePos = currentSlidePos;
+//        currentSlidePos = rightSlide.getCurrentPosition();
+//        if ((currentSlidePos > 2000) && (previousSlidePos <= 2000)){
+//            rightError = rightError + 50;
+//        }
 
         if (elevSlidePos != -3) {
 
             if (elevSlidePos == 1) {
-                leftSlide.setTargetPosition((int) elevTargetPos);
-                rightSlide.setTargetPosition((int) elevTargetPos - rightError);
+                leftSlide.setTargetPosition((int) elevTargetPos );
+                rightSlide.setTargetPosition((int) (elevTargetPos - error));
             }
             else {
                 leftSlide.setTargetPosition((int) elevTargetPos);
-                rightSlide.setTargetPosition((int) elevTargetPos);
+                rightSlide.setTargetPosition((int) (elevTargetPos - error));
             }
 
             elevPower = 1; // full power

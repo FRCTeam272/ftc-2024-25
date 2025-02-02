@@ -50,10 +50,10 @@ public class PitMode extends LinearOpMode {
             double fastpower = 3;
 
             if(gamepad1.left_bumper)  {
-                fastpower = 1;
+                fastpower = 3;
             }
             else {
-                fastpower = 3;
+                fastpower = 1;
             }
 
 
