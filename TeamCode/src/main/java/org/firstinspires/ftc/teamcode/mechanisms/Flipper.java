@@ -140,8 +140,8 @@ public class Flipper {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftFlipperS.setPower(-1); //negative power flips outward
-            rightFlipperS.setPower(-1);
+            leftFlipperS.setPower(1); //positive power flips outward
+            rightFlipperS.setPower(1);
 
             return false;
         }
@@ -155,8 +155,8 @@ public class Flipper {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
 
-            leftFlipperS.setPower(1); //positive power flips inward
-            rightFlipperS.setPower(1);
+            leftFlipperS.setPower(-1); //negative power flips inward
+            rightFlipperS.setPower(-1);
 
             return false;
         }
