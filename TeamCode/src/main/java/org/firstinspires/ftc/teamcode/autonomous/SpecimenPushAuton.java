@@ -7,12 +7,14 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.ClawElev;
 import org.firstinspires.ftc.teamcode.mechanisms.Extendo;
 
+@Disabled
 @Config
 @Autonomous (name="Right_Side_Sample_Push_Auton", group="Auto")
 public class SpecimenPushAuton extends LinearOpMode {
