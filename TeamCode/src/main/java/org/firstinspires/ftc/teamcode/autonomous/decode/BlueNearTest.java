@@ -22,9 +22,14 @@ public class BlueNearTest extends LinearOpMode{
     //TODO - Coordinate List (Pasted from MeepMeep!)
 
     // Starting Coordinates
-    double startX = -50;
-    double startY = -44;
-    double startH = Math.toRadians(235);
+    double startX = -63;
+    double startY = -36;
+    double startH = Math.toRadians(180);
+
+    //Prelaunch Coordinates
+    double launchX = -50;
+    double launchY = -44;
+    double launchH = Math.toRadians(235);
 
     // Pickup Load1
     double pickup1X = -12;
@@ -33,7 +38,7 @@ public class BlueNearTest extends LinearOpMode{
 
     // Intake Load1
     double intake1X = -12;
-    double intake1Y = -52;
+    double intake1Y = -46;
     double intake1H = Math.toRadians(270);
 
     // Launch Load1
@@ -48,7 +53,7 @@ public class BlueNearTest extends LinearOpMode{
 
     // Intake Load2
     double intake2X = 12;
-    double intake2Y= -52;
+    double intake2Y= -46;
     double intake2H = Math.toRadians(270);
 
     // Launch Load2
@@ -63,7 +68,7 @@ public class BlueNearTest extends LinearOpMode{
 
     // Intake Load3
     double intake3X = 35.5;
-    double intake3Y= -52;
+    double intake3Y= -46;
     double intake3H = Math.toRadians(270);
 
     // Ending Coordinates
@@ -82,10 +87,10 @@ public class BlueNearTest extends LinearOpMode{
         // because robot will do other actions timed by where in the trajectory it is
 
         //drive to preload shooting position
-//        TrajectoryActionBuilder goToShootPreload = drive.actionBuilder(StartPose)
-//                .strafeToLinearHeading(new Vector2d(preloadX,preloadY),preloadH) //drive to preload shooting position
-//                ;
-//        Action GoToShootPreload = goToShootPreload.build(); //notice the uppercase name of the Action vs the lower case name of the trajectory!
+        TrajectoryActionBuilder goToShootPreload = drive.actionBuilder(StartPose)
+               .strafeToLinearHeading(new Vector2d(launchX,launchY),launchH) //drive to preload shooting position
+                ;
+        Action GoToShootPreload = goToShootPreload.build(); //notice the uppercase name of the Action vs the lower case name of the trajectory!
 
         //drive to position to load 1st set of artifacts
         TrajectoryActionBuilder goPickupLoad1 = drive.actionBuilder((StartPose)) // instead of StartPose, it works from where the last trajectory ended
@@ -164,31 +169,34 @@ public class BlueNearTest extends LinearOpMode{
 
                 // shoot preload
                 new ParallelAction(
-                        new SleepAction(3) // placeholder for intake and launcher
+                        new SleepAction(0.25) // placeholder for intake and launcher
 
                 ),
+
+                // drive to prelaunch position
+                GoToShootPreload,
 
                 // drive to intake starting point for Load 1
                 GoPickupLoad1,
 
                 // intake Load 1
                 new ParallelAction(
-                        new SleepAction(1), // placeholder for intake
-                        IntakeLoad1
+                        new SleepAction(0.25), // placeholder for intake
+                      IntakeLoad1
                 ),
 
                 // drive to launch Load 1
                 DriveToLaunch1,
 
                 // launch Load 1
-                new SleepAction(1), // placeholder for launcher
+                new SleepAction(0.25), // placeholder for launcher
 
                 // drive to intake starting point for Load 2
                 GoPickupLoad2,
 
                 // intake Load 2
                 new ParallelAction(
-                        new SleepAction(1), // placeholder for intake
+                        new SleepAction(0.25), // placeholder for intake
                         IntakeLoad2
                 ),
 
@@ -196,14 +204,14 @@ public class BlueNearTest extends LinearOpMode{
                 DriveToLaunch2,
 
                 // launch Load 2
-                new SleepAction(1), // placeholder for launcher
+                new SleepAction(0.25), // placeholder for launcher
 
                 // drive to intake starting point for Load 3
                 GoPickupLoad3,
 
                 // intake Load 3
-                new ParallelAction(
-                        new SleepAction(1), // placeholder for intake
+               new ParallelAction(
+                        new SleepAction(0.25), // placeholder for intake
                         IntakeLoad3
                 ),
 

@@ -247,13 +247,13 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
                     // drive to shoot preload while spinning up motor wheel at the same time
                     new ParallelAction(
-                            new SleepAction(3), // placeholder for spinning up shooter flywheel Action
+                            new SleepAction(0.25), // placeholder for spinning up shooter flywheel Action
                             GoToShootPreload
                     ),
 
 
                     // shoot 3 Artifacts from far position
-                    new SleepAction(2), //placeholder for ShootArtifactFar
+                    new SleepAction(0.25), //placeholder for ShootArtifactFar
 
 
                     // drive to intake Load 1
@@ -265,7 +265,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 
                             // spin up Intake
-                            new SleepAction(1) //spin up Intake Placeholder
+                            new SleepAction(0.25) //spin up Intake Placeholder
                             // Drive forward intaking Artifacts)
                     ),
 
@@ -278,11 +278,11 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
                     new ParallelAction(
                             Turntoshootload1,
-                            new SleepAction(3) //placeholder for spinning up launcher
+                            new SleepAction(0.25) //placeholder for spinning up launcher
                     ),
 
 
-                    new SleepAction(2),//placeholder for launcher
+                    new SleepAction(0.25),//placeholder for launcher
 
 
                     Gotointakeload2,
@@ -290,17 +290,17 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
                     new ParallelAction(
                             Intakeload2,
-                            new SleepAction(1)// place holder for spinning intake              ;D
+                            new SleepAction(0.25)// place holder for spinning intake              ;D
                     ),
 
 
                     new ParallelAction(
                             Shootload2,
-                            new SleepAction(3)//placeholder for spinning up launcher
+                            new SleepAction(0.25)//placeholder for spinning up launcher
                     ),
 
 
-                    new SleepAction(2),//placeholder for launcher
+                    new SleepAction(0.25),//placeholder for launcher
 
 
                     Gotointakeload3,
@@ -308,7 +308,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
                     new ParallelAction(
                             Getload3,
-                            new SleepAction(1)//placeholder for spinning intake
+                            new SleepAction(0.25)//placeholder for spinning intake
                     ),
 
 
@@ -317,14 +317,14 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
                     new ParallelAction(
                             Shootload3,
-                            new SleepAction(3)//place holder for spinning up the launcher
+                            new SleepAction(0.25)//place holder for spinning up the launcher
                     ),
 
 
-                    new SleepAction(2) //placeholder for launcher
+                    new SleepAction(0.25), //placeholder for launcher
 
 
-//                Gotoend
+                    Gotoend
 
 
             ));
