@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
-@Autonomous (name="BlueNearTest", group="Auto")
+@Autonomous (name="BlueDoNothing", group="Auto")
 public class DoNothing extends LinearOpMode{
 
     //TODO - Coordinate List (Pasted from MeepMeep!)
@@ -27,7 +27,7 @@ public class DoNothing extends LinearOpMode{
 
 
     // Ending Coordinates
-    double endX = -24;
+    double endX = -48;
     double endY = -15;
     double endH = Math.toRadians(180);
 
